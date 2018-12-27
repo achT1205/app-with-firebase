@@ -1,0 +1,129 @@
+{
+  "header":{
+    "nav": {
+      "menus": {
+        "home": "Home",
+        "edit": "Add a post",
+        "announcements" :"Announcements",
+        "shop": "Shop",
+        "lng": {
+          "en": "EN",
+          "fr": "FR"
+        },
+        "profile": {
+          "account": "My account",
+          "logout": "Log out"
+        }
+      }
+    }
+  },
+  "home": {
+    "title": "Welcome to the best classifieds site of the moment",
+    "description": {
+      "part1": "You can create ads and sell your products for free",
+      "part2": "Post your wishes, or create alerts and you will be notified or contact in real time"
+    }
+  },
+  "common":{
+    "categoryTitles":{
+      "selectDefault":"Select on category",
+      "job" :"EMPLOYMENT",
+      "vehicule": "VEHICLES",
+      "immovable":"IMMOVABLE",
+      "vacation":"HOLIDAYS",
+      "multimedia":"MULTIMEDIA",
+      "house":"HOUSE",
+      "hobbies":"HOBBIES",
+      "equipments":"PROFESSIONAL EQUIPMENT",
+      "services":"SERVICES",
+      "others":"OTHERS" 
+    },
+    "categories": {
+      "1": "Job offers",
+      "2": "Cars",
+      "3": "Motorcycles",
+      "4": "Caravanning",
+      "5": "Utilities",
+      "6": "Auto Equipment",
+      "7": "Moto equipment",
+      "8": "Caravanning Equipment",
+      "9": "Boating",
+      "10": "Equipment Nautisme",
+      "11": "Sales",
+      "12": "Rentals",
+      "13": "Roommates",
+      "14": "Commercial Offices",
+      "15": "Holiday Rentals",
+      "16": "Bed and Breakfast",
+      "17": "Campsites",
+      "18": "Hotels",
+      "19": "Unusual accommodations",
+      "20": "Computer science",
+      "21": "Consoles & Video Games",
+      "22": "Image & Sound",
+      "23": "Telephony",
+      "24": "Furnishing",
+      "25": "Appliances",
+      "26": "Tableware",
+      "27": "Decoration",
+      "28": "Linen",
+      "29": "DIY",
+      "30": "Gardening",
+      "31": "Clothing",
+      "32": "Shoes",
+      "33": "Accessories & Luggage",
+      "34": "Watches & Jewelry",
+      "35": "baby equipment",
+      "36": "Baby clothes",
+      "37": "DVD / Movies",
+      "38": "CD / Music",
+      "39": "Books",
+      "40": "Animals",
+      "41": "Bicycles",
+      "42": "Sports",
+      "43": "musical instruments",
+      "44": "Collection",
+      "45": "Toys Games",
+      "46": "Gastronomy Wines",
+      "47": "Agricultural Equipment",
+      "48": "Transport - Handling",
+      "49": "Construction - Construction site",
+      "50": "Tools - Materials 2nd-work",
+      "51": "Industrial Equipment",
+      "52": "Catering - Hotels",
+      "53": "Office Supplies",
+      "54": "Shops & Markets",
+      "55": "Medical Equipment",
+      "56": "Services",
+      "57": "Ticket",
+      "58": "Events",
+      "59": "Private lessons",
+      "60": "Carpool",
+      "61": "Other"
+    }, 
+    "labels":{
+      "title":"Title",
+      "titleJob":"Job title"
+    }, 
+    "fuels": {
+      "1": "Diesel",
+      "2": "Electric",
+      "3":"Gasoline"
+    },
+    "gearBox": {
+      "1": "Manual",
+      "2": "Automatic"
+    }, 
+    "immovableTypes": {
+      "1": "House",
+      "2": "Appartment",
+      "3" :"Land",
+      "4":"Parcking",
+      "5":"Other"
+    },
+    "isEquiped": {
+      "1": "Equiped",
+      "2": "Not equiped"
+    }
+  }
+}

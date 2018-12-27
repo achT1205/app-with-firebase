@@ -1,0 +1,129 @@
+{
+  "header": {
+    "nav": {
+      "menus": {
+        "home": "Accueil",
+        "edit": "Ajouter un message",
+        "announcements": "Annonces",
+        "shop": "Boutique",
+        "lng": {
+          "en": "EN",
+          "fr": "FR"
+        },
+        "profile": {
+          "account": "Mon compte",
+          "logout": "Déconnexion"
+        }
+      }
+    }
+  },
+  "home": {
+    "title": "Bienvenue sur le meilleur site d'annonces du moment",
+    "description": {
+      "part1": "Vous pouvez créer des annonces et vendre vos produits gratuitement",
+      "part2": "Postez vos souhaits ou créez des alertes et vous serez averti ou contacté en temps réel"
+    }
+  },
+  "common": {
+    "categoryTitles": {
+      "selectDefault": "Select on category",
+      "job": "EMPLOYMENT",
+      "vehicule": "VEHICLES",
+      "immovable": "IMMOVABLE",
+      "vacation": "HOLIDAYS",
+      "multimedia": "MULTIMEDIA",
+      "house": "HOUSE",
+      "hobbies": "HOBBIES",
+      "equipments": "PROFESSIONAL EQUIPMENT",
+      "services": "SERVICES",
+      "others": "OTHERS"
+    },
+    "categories": {
+      "1": "Offres d'emploi",
+      "2": "Voitures",
+      "3": "motos",
+      "4": "Caravaning",
+      "5": "Utilitaires",
+      "6": "Auto Equipment",
+      "7": "Equipement moto",
+      "8": "Equipement de caravaning",
+      "9": "Navigation de plaisance",
+      "10": "Equipement Nautisme",
+      "11": "Ventes",
+      "12": "Location",
+      "13": "Colocataires",
+      "14": "Bureaux commerciaux",
+      "15": "Locations de vacances",
+      "16": "Chambres d'hôtes",
+      "17": "Campings",
+      "18": "Hôtels",
+      "19": "Hébergements insolites",
+      "20": "Informatique",
+      "21": "Consoles et jeux vidéos",
+      "22": "Image et son",
+      "23": "Téléphonie",
+      "24": "Ameublement",
+      "25": "Appareils",
+      "26": "Vaisselle",
+      "27": "Décoration",
+      "28": "Lin",
+      "29": "bricolage",
+      "30": "Jardinage",
+      "31": "Vêtements",
+      "32": "Chaussures",
+      "33": "Accessoires et bagages",
+      "34": "Montres & Bijoux",
+      "35": "équipement bébé",
+      "36": "Vêtements pour bébé",
+      "37": "DVD / Films",
+      "38": "CD / Musique",
+      "39": "Livres",
+      "40": "Animaux",
+      "41": "Vélos",
+      "42": "Sports",
+      "43": "instruments de musique",
+      "44": "Collection",
+      "45": "Jeux de jouets",
+      "46": "Vins de gastronomie",
+      "47": "Matériel agricole",
+      "48": "Transport - Manutention",
+      "49": "Construction - chantier",
+      "50": "Outils - Matériaux 2e oeuvre",
+      "51": "Equipement industriel",
+      "52": "Restauration - Hôtels",
+      "53": "Fournitures de bureau",
+      "54": "Boutiques et marchés",
+      "55": "équipement médical",
+      "56": "Services",
+      "57": "Ticket",
+      "58": "Événements",
+      "59": "Cours particuliers",
+      "60": "Covoiturage",
+      "61": "Autre"
+    },
+    "labels": {
+      "title": "Title",
+      "titleJob": "Le titre du poste"
+    },
+    "fuels": {
+      "1": "Diesel",
+      "2": "Electrique",
+      "3": "Essence"
+    },
+    "gearBox": {
+      "1": "Manuel",
+      "2": "Automatique"
+    },
+    "immovableTypes": {
+      "1": "Maison",
+      "2": "Appartement",
+      "3": "Terrain",
+      "4": "Parking",
+      "5": "Autre"
+    },
+    "isEquiped": {
+      "1": "Equipé",
+      "2": "Non équipé"
+    }
+  }
+}
