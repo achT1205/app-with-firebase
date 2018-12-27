@@ -7,8 +7,8 @@
         "announcements" :"Announcements",
         "shop": "Shop",
         "lng": {
-          "en": "EN",
-          "fr": "FR"
+          "en": "en",
+          "fr": "fr"
         },
         "profile": {
           "account": "My account",
