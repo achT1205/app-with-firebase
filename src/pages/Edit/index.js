@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBBtn, Card, CardBody, MDBContainer } from "mdbreact";
+import { MDBBtn, MDBContainer } from "mdbreact";
 import Form from '../../components/Form'
 import categoryArray from './categories';
 
@@ -8,21 +8,31 @@ class EditPage extends React.Component {
     announcement: {
       title: "",
       category: 0,
+      type: 0,
+      amount: "",
+      status: 1,
       criteria: {
         mark: null,
         model: null,
         yearOfModel: null,
-        cylinder: null,
+        cylinder: "",
         typeOfFuel: null,
         typeOfGearBox: null,
-        mileage: null,
+        mileage: "",
         immovableType: null,
         isEquiped: null,
-        numberOfRooms: null,
+        numberOfRooms: "",
         ges: null,
-        sizeOfSurface: null,
-        numberOfPeople: null,
-        numberOfVacationRooms: null
+        sizeOfSurface: "",
+        numberOfPeople: "",
+        numberOfVacationRooms: "",
+        hasSwimingPool: null
+      },
+      owner: {
+        typeOfProfile: 0
+      },
+      location: {
+
       }
     }
   }
@@ -98,7 +108,6 @@ class EditPage extends React.Component {
 
   handelImmovableTypesSelectChange = (value) => {
     let announcement = this.state.announcement;
-    debugger;
     if (value[0] && value[0].length > 0 && announcement.criteria.immovableType !== this.getImmovableTypeId(value[0])) {
       announcement.criteria.immovableType = this.getImmovableTypeId(value[0]);
       this.setState({ announcement: Object.assign({}, announcement) });
@@ -134,6 +143,68 @@ class EditPage extends React.Component {
       announcement.criteria.ges = this.getGesId(value[0]);
       this.setState({ announcement: Object.assign({}, announcement) });
     }
+  }
+
+  handelHasSwimingPoolSelectChange = (value) => {
+    let announcement = this.state.announcement;
+    if (announcement.criteria.hasSwimingPool !== this.swimingPoolOptionId(value[0])) {
+      announcement.criteria.hasSwimingPool = this.swimingPoolOptionId(value[0]);
+      this.setState({ announcement: Object.assign({}, announcement) });
+    }
+  }
+
+  handleDescriptionInputChange = (event) => {
+    let announcement = this.state.announcement;
+    let field = event.target.name;
+    announcement[field] = event.target.value;
+    announcement.shortDescription = event.target.value.substring(0, 80) + " ..."
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  onClickProfileRadio = (value) => {
+    let announcement = this.state.announcement;
+    announcement.owner.typeOfProfile = value;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  onClickTypeRadio = (value) => {
+    let announcement = this.state.announcement;
+    announcement.type = value;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  onClickGenderRadio = (nr) => {
+    let announcement = this.state.announcement;
+    announcement.owner.gender = nr;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+  onClickMarketingCheck = () => {
+    let announcement = this.state.announcement;
+    announcement.owner.toBeContactedForMarketing = !announcement.owner.toBeContactedForMarketing;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  onClickHidePhoneCheck = () => {
+    let announcement = this.state.announcement;
+    announcement.owner.hidePhone = !announcement.owner.hidePhone;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  handleLocationInputChange = (event) => {
+    const field = event.target.name;
+    let announcement = this.state.announcement;
+    announcement.location[field] = event.target.value;
+    this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+
+  swimingPoolOptionId(label) {
+    if (label === "Yes" || label === "Oui") {
+      return true;
+    };
+    if (label === "No" || label === "Non") {
+      return false;
+    };
   }
 
   getGesId(word) {
@@ -198,36 +269,40 @@ class EditPage extends React.Component {
       return 3;
     };
   }
-  
+
   render() {
     return (
-      <Card wide>
-        <CardBody cascade>
-          <MDBContainer>
-            <form>
-              <Form
-                announcement={this.state.announcement}
-                handelYearsSelectChange={this.handelYearsSelectChange}
-                handleInputChange={this.handleInputChange}
-                handelMarksSelectChange={this.handelMarksSelectChange}
-                handelCategorySelectChange={this.handelCategorySelectChange}
-                handelModelsSelectChange={this.handelModelsSelectChange}
-                handleCriteriaInputChange={this.handleCriteriaInputChange}
-                handelFuelsSelectChange={this.handelFuelsSelectChange}
-                handelGearBoxSelectChange={this.handelGearBoxSelectChange}
-                handelImmovableTypesSelectChange={this.handelImmovableTypesSelectChange}
-                handelIsEquipedSelectChange={this.handelIsEquipedSelectChange}
-                handelNumberOfRoomsSelectChange={this.handelNumberOfRoomsSelectChange}
-                handelEnergyClassificationSelectChange={this.handelEnergyClassificationSelectChange}
-                handelGesSelectChange={this.handelGesSelectChange}
-              />
-              <MDBBtn color="success" type="submit">
-                Submit Form
-              </MDBBtn>
-            </form>
-          </MDBContainer>
-        </CardBody>
-      </Card>
+      <MDBContainer>
+        <form>
+          <Form
+            announcement={this.state.announcement}
+            handelYearsSelectChange={this.handelYearsSelectChange}
+            handleInputChange={this.handleInputChange}
+            handelMarksSelectChange={this.handelMarksSelectChange}
+            handelCategorySelectChange={this.handelCategorySelectChange}
+            handelModelsSelectChange={this.handelModelsSelectChange}
+            handleCriteriaInputChange={this.handleCriteriaInputChange}
+            handelFuelsSelectChange={this.handelFuelsSelectChange}
+            handelGearBoxSelectChange={this.handelGearBoxSelectChange}
+            handelImmovableTypesSelectChange={this.handelImmovableTypesSelectChange}
+            handelIsEquipedSelectChange={this.handelIsEquipedSelectChange}
+            handelNumberOfRoomsSelectChange={this.handelNumberOfRoomsSelectChange}
+            handelEnergyClassificationSelectChange={this.handelEnergyClassificationSelectChange}
+            handelGesSelectChange={this.handelGesSelectChange}
+            handelHasSwimingPoolSelectChange={this.handelHasSwimingPoolSelectChange}
+            handleDescriptionInputChange={this.handleDescriptionInputChange}
+            onClickProfileRadio={this.onClickProfileRadio}
+            onClickTypeRadio={this.onClickTypeRadio}
+            onClickGenderRadio={this.onClickGenderRadio}
+            onClickHidePhoneCheck={this.onClickHidePhoneCheck}
+            onClickMarketingCheck={this.onClickMarketingCheck}
+            handleLocationInputChange={this.handleLocationInputChange}
+          />
+          <MDBBtn color="success" type="submit">
+            Submit Form
+          </MDBBtn>
+        </form>
+      </MDBContainer>
     );
   }
 }

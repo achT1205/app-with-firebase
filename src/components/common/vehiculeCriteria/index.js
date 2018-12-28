@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react'
 import { MDBCol, MDBInput, MDBRow } from 'mdbreact'
+import { withNamespaces } from 'react-i18next';
 import MarksSelect from '../markSelect'
 import ModelSelect from '../modelSelect'
 import ModelYear from '../modelYearSelect'
 import Fuel from '../fuelSelect'
 import GearBox from '../gearBoxSelect'
 
-const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBoxSelectChange, handleCriteriaInputChange, handelFuelsSelectChange, handelModelsSelectChange, handelYearsSelectChange }) => {
+
+const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBoxSelectChange, handleCriteriaInputChange, handelFuelsSelectChange, handelModelsSelectChange, handelYearsSelectChange , t}) => {
     return (
         <Fragment>
             <MDBRow>
@@ -18,9 +20,9 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                                 handelMarksSelectChange={handelMarksSelectChange}
                                 multiple={false}
                                 search={true}
-                                hideLabe={false}
-                                selectedDefault={'Select a mark '}
-                                label={'Mark'}
+                                hideLabe={true}
+                                selectedDefault={t('common.labels.mark.select')}
+                                label={t('common.labels.mark.label')}
                             />
                         </MDBCol>
                         <MDBCol md="4">
@@ -29,9 +31,9 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                                 handelModelsSelectChange={handelModelsSelectChange}
                                 multiple={false}
                                 search={true}
-                                hideLabe={false}
-                                selectedDefault={'Select a model '}
-                                label={'Model'}
+                                hideLabe={true}
+                                selectedDefault={t('common.labels.model.select')}
+                                label={t('common.labels.model.label')}
                                 selectedMarks={[announcement.criteria.mark]}
                                 selectedModels={[announcement.criteria.model]}
                             />
@@ -44,9 +46,9 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                             handelYearsSelectChange={handelYearsSelectChange}
                             multiple={false}
                             search={true}
-                            hideLabe={false}
-                            selectedDefault={'Select a year '}
-                            label={'Year of the model'}
+                            hideLabe={true}
+                            selectedDefault={t('common.labels.year.select')}
+                            label={t('common.labels.year.label')}
                             selectedYear={[announcement.criteria.selectedYear]}
                             yearLimit={30}
                             currentYear={2019}
@@ -59,9 +61,9 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                             handelFuelsSelectChange={handelFuelsSelectChange}
                             multiple={false}
                             search={false}
-                            hideLabe={false}
-                            selectedDefault={'Select a type of fuel '}
-                            label={'Fuel'}
+                            hideLabe={true}
+                            selectedDefault={t('common.labels.fuel.select')}
+                            label={t('common.labels.fuel.label')}
                             selectedfuels={[announcement.criteria.typeOfFuel]}
                         />
                     </MDBCol>
@@ -73,9 +75,9 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                             handelGearBoxSelectChange={handelGearBoxSelectChange}
                             multiple={false}
                             search={false}
-                            hideLabe={false}
-                            selectedDefault={'Select a type of gear box '}
-                            label={'Gear Box'}
+                            hideLabe={true}
+                            selectedDefault={t('common.labels.gear.select')}
+                            label={t('common.labels.gear.label')}
                             selectedGearBox={[announcement.criteria.typeOfGearBox]}
                         />
                     </MDBCol>
@@ -83,7 +85,7 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                 {announcement.category === 3 &&
                     <MDBCol md="4">
                         <MDBInput
-                            label={'Cylinder'}
+                            label={t('common.labels.cylinder')}
                             name="cylinder"
                             value={announcement.criteria.cylinder}
                             onChange={handleCriteriaInputChange} />
@@ -92,7 +94,7 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                 {announcement.category > 1 && announcement.category < 6 &&
                     <MDBCol md={[4].includes(announcement.category) ? '6' : '4'}>
                         <MDBInput
-                            label={'Mileage'}
+                            label={t('common.labels.mileage')}
                             type="text"
                             name="mileage"
                             onBlur={handleCriteriaInputChange} />
@@ -102,5 +104,5 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
         </Fragment>
     )
 }
-
-export default VehiculeCriteria
+const VehiculeCriteriaWrapped = withNamespaces()(VehiculeCriteria);
+export default VehiculeCriteriaWrapped

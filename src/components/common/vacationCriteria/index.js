@@ -1,13 +1,26 @@
 import React, { Fragment } from 'react'
 import { MDBCol, MDBInput, MDBRow } from 'mdbreact'
+import { withNamespaces } from 'react-i18next';
+import HasSwimingPool from '../hasSwimingPoolSelect'
 
-const VacationCriteria = ({announcement, handleCriteriaInputChange }) => {
+const VacationCriteria = ({t, announcement, handleCriteriaInputChange , handelHasSwimingPoolSelectChange}) => {
     return (
         <Fragment>
             <MDBRow>
                 <MDBCol md="4">
+                    <HasSwimingPool
+                        handelHasSwimingPoolSelectChange={handelHasSwimingPoolSelectChange}
+                        multiple={false}
+                        search={false}
+                        hideLabe={true}
+                        selectedChoices={announcement.criteria.hasSwimingPool}
+                        selectedDefault={t('common.labels.hasSwimingPool.select')}
+                        label={t('common.labels.hasSwimingPool.label')}
+                    />
+                </MDBCol>
+                <MDBCol md="4">
                     <MDBInput
-                        label={"Number of people"}
+                        label={t('common.labels.immovableCapacity')}
                         name="numberOfPeople"
                         value={announcement.criteria.numberOfPeople}
                         onChange={handleCriteriaInputChange} />
@@ -15,7 +28,7 @@ const VacationCriteria = ({announcement, handleCriteriaInputChange }) => {
                 <MDBCol md="4">
                     <MDBInput
                         name="numberOfVacationRooms"
-                        label={"Number of vacation rooms"}
+                        label={t('common.labels.numberOfVacationRooms')}
                         value={announcement.criteria.numberOfVacationRooms}
                         onChange={handleCriteriaInputChange} />
                 </MDBCol>
@@ -23,5 +36,5 @@ const VacationCriteria = ({announcement, handleCriteriaInputChange }) => {
         </Fragment>
     )
 }
-
-export default VacationCriteria
+const VacationCriteriaWrapped = withNamespaces()(VacationCriteria);
+export default VacationCriteriaWrapped

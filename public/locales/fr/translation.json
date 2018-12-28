@@ -25,6 +25,20 @@
     }
   },
   "common": {
+    "swimingPoolOptions": {
+      "1": "Oui",
+      "2": "Nom"
+    },
+    "typeOfProfile": {
+      "0":"Vous etes",
+      "1": "Particulier",
+      "2": "Professionel"
+    },
+    "types": {
+      "0":"Type d'annonce",
+      "1": "Offre",
+      "2": "Demmande"
+    },
     "categoryTitles": {
       "selectDefault": "Select on category",
       "job": "EMPLOYMENT",
@@ -103,7 +117,94 @@
     },
     "labels": {
       "title": "Title",
-      "titleJob": "Le titre du poste"
+      "titleJob": "Le titre du poste",
+      "amount":{
+        "title" :"Montant"
+      },
+      "description":{
+        "title" :"Description"
+      },
+      "announcement": "Annonce",
+      "location": "Localisation",
+      "owner": {
+        "title": "Informations du propriétaire",
+        "gender": "genre"
+      },
+      "selectDefault": "Choisissez votre option",
+      "mileage": "kilométrage",
+      "cylinder": "Cylindre (cm3)",
+      "equiped": "équipé",
+      "immovableSize": "Taille (m2)",
+      "roomsNumber": "Nombre de chambres",
+      "immovableCapacity": "Capacité",
+      "numberOfVacationRooms": "Nombre de chambres",
+      "swimingPool": "Piscine",
+      "city": "ville",
+      "zipCode": "Code postal",
+      "numberOfStreet": "Numéro de rue",
+      "streetName": "Nom de la rue",
+      "address": "Adresse",
+      "placeKnownAs": "Complément d'adresse",
+      "country": "Pays",
+      "genre1": "M",
+      "genre2": "F",
+      "gender3": "Je ne veux pas le mentionner",
+      "name": "Nom",
+      "phone": "Téléphone",
+      "email": "Email",
+      "hidePhone": "Ne montre pas mon téléphone",
+      "toBeConteatedForMarketing": "Ne pas contacter pour le marketing",
+      "save": "enregistrer",
+      "saving": "Sauver ...",
+      "category":{
+        "label":"Catégorie",
+        "select":"Catégorie"
+      },
+      "mark":{
+        "label":"Marque",
+        "select":"Marque"
+      },
+      "model":{
+        "label":"Modèle",
+        "select":"Modèle"
+      },
+      "year":{
+        "label":"Année du modèle",
+        "select":"L'année du modèle"
+      },
+      "fuel":{
+        "label":"Carburant",
+        "select":"Le type de carburant"
+      },
+      "gear":{
+        "label":"Boite de vitesse",
+        "select":"Boite de vitesse"
+      },
+      "immovableType":{
+        "label":"Type de bien",
+        "select":"Le type de bien"
+      },
+      "isEquiped":{
+        "label":"Equipé ou non",
+        "select":"Equipé ou non"
+      },
+      "numberOfRooms":{
+        "label":"Nombre de pièces",
+        "select":"Nombre de pièces"
+      },
+      "energyClassification":{
+        "label":"Classification d'énergétique",
+        "select":"Classification d'énergétique"
+      },
+      "ges":{
+        "label":"GES",
+        "select":"GES"
+      },
+      "hasSwimingPool":{
+        "label":"Avec piscine ?",
+        "select":"Avec piscine ?"
+      },
+      "numberOfPeople":"Nombre de personnes"
     },
     "fuels": {
       "1": "Diesel",

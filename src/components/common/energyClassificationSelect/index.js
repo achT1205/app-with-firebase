@@ -12,6 +12,15 @@ class EnergyClassification extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { selectedChoices, lng, i18n } = nextProps;
+        if (lng !== this.props.lng) {
+            i18n.changeLanguage(lng);
+            this.setState({energyClassificationOptions: []})
+            this.formatEnergyClassificationOptions(selectedChoices)
+        }
+    }
+
     formatEnergyClassificationOptions(selectedChoices) {
         this.setState((prevState) => {
             let prevOptions = [...prevState.energyClassificationOptions];

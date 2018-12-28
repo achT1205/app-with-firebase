@@ -9,7 +9,15 @@ class NumberOfRooms extends Component {
     componentDidMount() {
         const { numberOfRooms } = this.props;
         this.formatRoomsNumberOptions(numberOfRooms)
+    }
 
+    componentWillReceiveProps(nextProps) {
+        const { numberOfRooms, lng, i18n } = nextProps;
+        if (lng !== this.props.lng) {
+            i18n.changeLanguage(lng);
+            this.setState({roomsNumberOptions: []})
+            this.formatRoomsNumberOptions(numberOfRooms)
+        }
     }
 
     formatRoomsNumberOptions(selected) {

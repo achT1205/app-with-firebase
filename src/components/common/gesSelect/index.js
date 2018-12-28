@@ -12,6 +12,15 @@ class Ges extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { t, selectedChoices, lng, i18n } = nextProps;
+        if (lng !== this.props.lng) {
+            i18n.changeLanguage(lng);
+            this.setState({ gesOptions: [] })
+            this.formatGesOptions(selectedChoices, t)
+        }
+    }
+
     formatGesOptions(selectedChoices) {
         this.setState((prevState) => {
             let prevOptions = [...prevState.gesOptions];

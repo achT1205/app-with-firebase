@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { MDBRow, MDBCol, MDBInput } from 'mdbreact'
+import { withNamespaces } from 'react-i18next';
 import ImmovableType from '../immovableTypeSelect'
 import IsEquiped from '../IsEquipedSelect'
 import NumberOfRooms from '../numberOfRoomsSelect'
@@ -8,7 +9,7 @@ import Ges from '../gesSelect'
 
 
 const ImmovableCriteria = (props) => {
-    const { handleCriteriaInputChange, handelGesSelectChange, handelEnergyClassificationSelectChange, handelNumberOfRoomsSelectChange, handelImmovableTypesSelectChange, handelIsEquipedSelectChange, announcement } = props;
+    const { t, handleCriteriaInputChange, handelGesSelectChange, handelEnergyClassificationSelectChange, handelNumberOfRoomsSelectChange, handelImmovableTypesSelectChange, handelIsEquipedSelectChange, announcement } = props;
     return (
         <Fragment>
             <MDBRow>
@@ -20,9 +21,9 @@ const ImmovableCriteria = (props) => {
                                 handelImmovableTypesSelectChange={handelImmovableTypesSelectChange}
                                 multiple={false}
                                 search={true}
-                                hideLabe={false}
-                                selectedDefault={'Type'}
-                                label={'Type'}
+                                hideLabe={true}
+                                selectedDefault={t('common.labels.immovableType.select')}
+                                label={t('common.labels.immovableType.label')}
                                 selectedTypes={[announcement.criteria.immovableType]}
                             />
                         </MDBCol>
@@ -33,9 +34,9 @@ const ImmovableCriteria = (props) => {
                                 handelIsEquipedSelectChange={handelIsEquipedSelectChange}
                                 multiple={false}
                                 search={false}
-                                hideLabe={false}
-                                selectedDefault={'Equiped or not'}
-                                label={'Equiped or not'}
+                                hideLabe={true}
+                                selectedDefault={t('common.labels.isEquiped.select')}
+                                label={t('common.labels.isEquiped.label')}
                                 selectedChoices={[announcement.criteria.isEquiped]}
                             />
                         </MDBCol>
@@ -46,9 +47,9 @@ const ImmovableCriteria = (props) => {
                                 handelNumberOfRoomsSelectChange={handelNumberOfRoomsSelectChange}
                                 multiple={false}
                                 search={false}
-                                hideLabe={false}
-                                selectedDefault={'Number of rooms'}
-                                label={'Number of rooms'}
+                                hideLabe={true}
+                                selectedDefault={t('common.labels.numberOfRooms.select')}
+                                label={t('common.labels.numberOfRooms.label')}
                                 numberOfRooms={[announcement.criteria.numberOfRooms]}
                             />
                         </MDBCol>
@@ -58,9 +59,9 @@ const ImmovableCriteria = (props) => {
                             handelEnergyClassificationSelectChange={handelEnergyClassificationSelectChange}
                             multiple={false}
                             search={false}
-                            hideLabe={false}
-                            selectedDefault={'Energy classification'}
-                            label={'Energy classification'}
+                            hideLabe={true}
+                            selectedDefault={t('common.labels.energyClassification.select')}
+                            label={t('common.labels.energyClassification.label')}
                             selectedChoices={[announcement.criteria.energyClassification]}
                         />
                     </MDBCol>
@@ -69,15 +70,15 @@ const ImmovableCriteria = (props) => {
                             handelGesSelectChange={handelGesSelectChange}
                             multiple={false}
                             search={false}
-                            hideLabe={false}
-                            selectedDefault={'Ges'}
-                            label={'Ges'}
+                            hideLabe={true}
+                            selectedDefault={t('common.labels.ges.select')}
+                            label={t('common.labels.ges.label')}
                             selectedChoices={[announcement.criteria.ges]}
                         />
                     </MDBCol>
                     <MDBCol md={[11,13].includes(announcement.category) ? '6' : announcement.category === 12 ? '4' : ''}>
                         <MDBInput
-                            label={"Size"}
+                            label={t('common.labels.immovableSize')}
                             type="text"
                             name="sizeOfSurface"
                             value={announcement.criteria.sizeOfSurface}
@@ -88,5 +89,5 @@ const ImmovableCriteria = (props) => {
         </Fragment>
     )
 }
-
-export default ImmovableCriteria
+const ImmovableCriteriaWrapped = withNamespaces()(ImmovableCriteria);
+export default ImmovableCriteriaWrapped

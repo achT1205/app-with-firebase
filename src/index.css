@@ -46,3 +46,12 @@
 	margin:3px;
 	cursor: pointer;
 }
+
+.flags{
+	margin-top: -17px;
+    margin-right: -50px;
+}
+
+.fadeElement.fadeIn {
+    height: 300px !important;
+}

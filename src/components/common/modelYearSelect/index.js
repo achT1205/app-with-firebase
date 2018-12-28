@@ -19,6 +19,18 @@ class ModelYear extends Component {
         this.formatYearOfModel(yearLimit, currentYear, selectedYear);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {  
+            selectedYear,
+            yearLimit,
+            currentYear, lng, i18n } = nextProps;
+        if (lng !== this.props.lng) {
+            i18n.changeLanguage(lng);
+            this.setState({yearOptions: []})
+            this.formatYearOfModel(yearLimit, currentYear, selectedYear);
+        }
+    }
+
     formatYearOfModel(limit, currentYear, selectedYear) {
         if (limit && currentYear)
             this.setState((prevState) => {

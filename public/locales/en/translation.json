@@ -1,10 +1,10 @@
 {
-  "header":{
+  "header": {
     "nav": {
       "menus": {
         "home": "Home",
         "edit": "Add a post",
-        "announcements" :"Announcements",
+        "announcements": "Announcements",
         "shop": "Shop",
         "lng": {
           "en": "en",
@@ -24,19 +24,33 @@
       "part2": "Post your wishes, or create alerts and you will be notified or contact in real time"
     }
   },
-  "common":{
-    "categoryTitles":{
-      "selectDefault":"Select on category",
-      "job" :"EMPLOYMENT",
+  "common": {
+    "swimingPoolOptions": {
+      "1": "Yes",
+      "2": "No"
+    },
+    "typeOfProfile": {
+      "0":"You are",
+      "1": "Particular",
+      "2": "Professional"
+    },
+    "types": {
+      "0":"Type of announcement",
+      "1": "Offer",
+      "2": "Demmande"
+    },
+    "categoryTitles": {
+      "selectDefault": "Select on category",
+      "job": "EMPLOYMENT",
       "vehicule": "VEHICLES",
-      "immovable":"IMMOVABLE",
-      "vacation":"HOLIDAYS",
-      "multimedia":"MULTIMEDIA",
-      "house":"HOUSE",
-      "hobbies":"HOBBIES",
-      "equipments":"PROFESSIONAL EQUIPMENT",
-      "services":"SERVICES",
-      "others":"OTHERS" 
+      "immovable": "IMMOVABLE",
+      "vacation": "HOLIDAYS",
+      "multimedia": "MULTIMEDIA",
+      "house": "HOUSE",
+      "hobbies": "HOBBIES",
+      "equipments": "PROFESSIONAL EQUIPMENT",
+      "services": "SERVICES",
+      "others": "OTHERS"
     },
     "categories": {
       "1": "Job offers",
@@ -100,26 +114,112 @@
       "59": "Private lessons",
       "60": "Carpool",
       "61": "Other"
-    }, 
-    "labels":{
-      "title":"Title",
-      "titleJob":"Job title"
-    }, 
+    },
+    "labels": {
+      "title": "Title",
+      "titleJob": "Job title",
+      "amount":{
+        "title" :"Amount"
+      },
+      "description":{
+        "title" :"Description"
+      },
+      "announcement": "Announcement",
+        "location": "Location",
+        "owner": {
+          "title": "Owner informations",
+          "gender": "Gender"
+        },
+        "selectDefault": "Choose your option",
+        "mileage": "Mileage (Km)",
+        "cylinder": "Cylinder (cm3)",
+        "equiped": "Equiped",
+        "immovableSize": "Size (m2)",
+        "roomsNumber": "Number of rooms",
+        "immovableCapacity": "Capacity",
+        "numberOfVacationRooms": "Number of rooms",
+        "swimingPool": "Swiming pool",
+        "city": "City",
+        "zipCode": "Zip code",
+        "numberOfStreet": "Street number",
+        "streetName": "Name of the street",
+        "address": "Address",
+        "placeKnownAs": "Additional address",
+        "country": "Country",
+        "gender1": "M",
+        "gender2": "F",
+        "gender3": "Don't want to mentionne it",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "hidePhone": "Don't show my phone",
+        "toBeContactedForMarketing": "Not to be contacted for marketing",
+        "save": "Save",
+        "saving": "Saving ...",
+        "category":{
+          "label":"Category",
+          "select":"Category"
+        },
+        "mark":{
+          "label":"Mark",
+          "select":"Mark"
+        },
+        "model":{
+          "label":"Model",
+          "select":"Model"
+        },
+        "year":{
+          "label":"Model's year",
+          "select":"The year of the model"
+        },
+        "fuel":{
+          "label":"Fuel",
+          "select":"Type of fuel"
+        },
+        "gear":{
+          "label":"Gear box",
+          "select":"Select a gear box"
+        },
+        "immovableType":{
+          "label":"Type",
+          "select":"Select a Type"
+        },
+        "isEquiped":{
+          "label":"Equiped or not",
+          "select":"Equiped or not"
+        },
+        "numberOfRooms":{
+          "label":"Number of rooms",
+          "select":"Number of rooms"
+        },
+        "energyClassification":{
+          "label":"Energy classification",
+          "select":"Energy classification"
+        },
+        "ges":{
+          "label":"GES",
+          "select":"GES"
+        },
+        "hasSwimingPool":{
+          "label":"With swiming pool ?",
+          "select":"With swiming pool ?"
+        }
+    },
     "fuels": {
       "1": "Diesel",
       "2": "Electric",
-      "3":"Gasoline"
+      "3": "Gasoline"
     },
     "gearBox": {
       "1": "Manual",
       "2": "Automatic"
-    }, 
+    },
     "immovableTypes": {
       "1": "House",
       "2": "Appartment",
-      "3" :"Land",
-      "4":"Parcking",
-      "5":"Other"
+      "3": "Land",
+      "4": "Parcking",
+      "5": "Other"
     },
     "isEquiped": {
       "1": "Equiped",
