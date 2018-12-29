@@ -124,6 +124,13 @@ class EditPage extends React.Component {
     announcements[id] = announcement;
     this.setState({ announcements });
     this.setState({ saving: false });
+    let message = this.props.match.params.id ? "Your post has been updated succefuly :)" 
+    : "Your post has been create succefuly :)";
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      closeButton: true,
+    });
   }
 
   handleInputChange = (event) => {

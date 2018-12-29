@@ -78,7 +78,7 @@ class Header extends Component {
                             <NavItem>
                                 <NavLink
                                     onClick={this.closeCollapse("mainNavbarCollapse")}
-                                    to="/edit"
+                                    to="/create"
                                 >
                                     {t('header.nav.menus.edit')}
                                 </NavLink>

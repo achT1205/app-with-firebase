@@ -37,7 +37,7 @@ const Form = ({
 }) => {
     return (
         <Fragment>
-            <Card wide>
+            <Card wide className="mt-3">
                 <CardBody cascade>
                     <CardTitle>{t('common.labels.announcement')}</CardTitle>
                     <Fragment>
@@ -302,13 +302,17 @@ const Form = ({
                     </MDBRow>
                 </CardBody>
             </Card>
-            <MDBBtn
-                color="primary"
-                disabled={saving}
-                onClick={handleOnSubmitForm}
-            >
-                {saving ? t('common.labels.saving') : t('common.labels.save')}
-            </MDBBtn>
+            <Card wide className="mt-3">
+                <CardBody cascade>
+                    <MDBBtn
+                        color="primary"
+                        disabled={saving}
+                        onClick={handleOnSubmitForm}
+                    >
+                        {saving ? t('common.labels.saving') : t('common.labels.save')}
+                    </MDBBtn>
+                </CardBody>
+            </Card>
         </Fragment>
     )
 }
