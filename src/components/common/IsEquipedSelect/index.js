@@ -1,5 +1,5 @@
-import React, { Component , Fragment} from 'react'
-import {MDBSelect} from 'mdbreact'
+import React, { Component, Fragment } from 'react'
+import { MDBSelect } from 'mdbreact'
 import { withNamespaces } from 'react-i18next';
 
 class IsEquiped extends Component {
@@ -23,7 +23,6 @@ class IsEquiped extends Component {
     }
 
     formatIsEquipedOptions(selectedChoices, t) {
-        debugger;
         this.setState((prevState) => {
             let prevOptions = [...prevState.isEquipedOptions];
             prevOptions.push(

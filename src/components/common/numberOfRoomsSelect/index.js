@@ -23,11 +23,10 @@ class NumberOfRooms extends Component {
     formatRoomsNumberOptions(selected) {
         this.setState((prevState) => {
             let prevOptions = [...prevState.roomsNumberOptions];
-
             for (let i = 1; i < 7; i++) {
                 prevOptions.push(
                     {
-                        checked: i === selected ? true : false,
+                        checked: selected && selected.includes(i) ? true : false,
                         disabled: false,
                         icon: null,
                         value: i.toString()

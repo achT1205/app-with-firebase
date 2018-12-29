@@ -3,7 +3,9 @@ import { Route, Switch } from "react-router-dom";
 
 //pages
 import HomePage from "./pages/home/";
-import EditPage from "./pages/Edit";
+import EditPage from "./pages/edit";
+import ListPage from "./pages/list";
+import DetailsPage from "./pages/details";
 
 
 class Routes extends React.Component {
@@ -11,16 +13,10 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/edit" component={EditPage} />
+        <Route path="/create" component={EditPage} />
         <Route path="/edit/:id" component={EditPage} />
-       {/*
-       <Route path="/details/:id" component={DetailsPage} />
-       
-        <Route path="/about" component={AboutPage} />
-        <Route path="/edit/:id" component={EditPage} />
-        <Route path="/summary/:id" component ={SummaryPage}/>
-        <Route path="/shop" component ={shopPage}/>
-      */}
+        <Route path="/announcements" component={ListPage} />
+        <Route path="/details/:id" component={DetailsPage} />
         <Route
           render={function() {
             return <h1>Not Found</h1>;

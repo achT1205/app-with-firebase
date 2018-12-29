@@ -13,7 +13,7 @@ const VacationCriteria = ({t, announcement, handleCriteriaInputChange , handelHa
                         multiple={false}
                         search={false}
                         hideLabe={true}
-                        selectedChoices={announcement.criteria.hasSwimingPool}
+                        selectedChoices={[announcement.criteria.hasSwimingPool]}
                         selectedDefault={t('common.labels.hasSwimingPool.select')}
                         label={t('common.labels.hasSwimingPool.label')}
                     />

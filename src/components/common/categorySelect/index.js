@@ -22,6 +22,11 @@ class CategorySelect extends Component {
 
   componentWillReceiveProps(nextProps){
     const { t, selectedValues, lng, i18n } = nextProps;
+    if( selectedValues !== this.props.selectedValues){
+      let ops = getCategoryOptions(t);
+      this.setState({ options: ops })
+      this.formatOptions(t, selectedValues)
+    }
     if (lng !== this.props.lng) {
       i18n.changeLanguage(lng);
       let ops = getCategoryOptions(t);

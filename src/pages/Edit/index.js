@@ -1,11 +1,30 @@
 import React from "react";
-import { MDBBtn, MDBContainer } from "mdbreact";
+import { MDBContainer, toast, ToastContainer } from "mdbreact";
 import Form from '../../components/Form'
 import categoryArray from './categories';
+// Firebase
+import base from '../../base'
 
 class EditPage extends React.Component {
   state = {
+    saving: false,
+    announcements: {},
     announcement: {
+      id: null,
+      mainPicture: "http://placehold.it/708x472",
+      pictures: [
+        "https://via.placeholder.com/500x350",
+        "https://via.placeholder.com/500x350",
+        "https://via.placeholder.com/500x350",
+        "https://via.placeholder.com/500x350"
+      ],
+      description: "",
+      shortDescription: "",
+      createAt: "",
+      lastModifDate: "",
+      viewCount: 0,
+      likeCount: 0,
+      currency: "",
       title: "",
       category: 0,
       type: 0,
@@ -29,12 +48,82 @@ class EditPage extends React.Component {
         hasSwimingPool: null
       },
       owner: {
-        typeOfProfile: 0
+        typeOfProfile: 0,
+        id: "",
+        profileUrl: 'http://placehold.it/50x50',
+        name: "",
+        gender: 0,
+        company: "",
+        email: "",
+        phone: "",
+        address: "",
+        hidePhone: true,
+        toBeContacted: false,
+        toBeContactedForMarketing: false,
+        isConneted: false,
+        likeCount: 0
       },
       location: {
-
+        city: "",
+        country: "",
+        zipCode: "",
+        numberOfStreet: "",
+        placeKnownAs: "",
+        streetName: ""
       }
     }
+  }
+
+  componentDidMount() {
+    base.syncState('/announcements', {
+      context: this,
+      state: 'announcements'
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.announcements && this.props.match.params.id && !this.state.announcement.id) {
+      let announcement = this.state.announcements[this.props.match.params.id];
+      if (announcement && announcement.id)
+        this.setState({ announcement: announcement })
+    }
+  }
+
+  AnnouncementFromISValid() {
+    let formIsValid = true;
+    let errors = {};
+
+    if (!this.state.announcement.title || this.state.announcement.title.length < 5) {
+      errors.title = "Title must be at least 5 characters.";
+      formIsValid = false;
+    }
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
+  handleOnSubmitForm = (event) => {
+    event.preventDefault();
+    if (!this.AnnouncementFromISValid()) {
+      toast.error("You must fell all teh required fields :(", {
+        position: "top-right",
+        autoClose: 5000,
+        closeButton: true,
+      });
+
+      return;
+    }
+    this.setState({ saving: true });
+    this.addAnnouncement(this.state.announcement);
+  }
+
+  addAnnouncement = announcement => {
+    const announcements = { ...this.state.announcements }
+    let id = `announcement-${Date.now()}`;
+    announcement.id = id;
+    announcement.createAt = Date();
+    announcements[id] = announcement;
+    this.setState({ announcements });
+    this.setState({ saving: false });
   }
 
   handleInputChange = (event) => {
@@ -197,6 +286,13 @@ class EditPage extends React.Component {
     this.setState({ announcement: Object.assign({}, announcement) });
   }
 
+  handleOwnerInputChange = (event) => {
+    const field = event.target.name;
+    let announcement = this.state.announcement;
+    announcement.owner[field] = event.target.value;
+    this.setState({ announcement: Object.assign({}, announcement) });
+}
+
 
   swimingPoolOptionId(label) {
     if (label === "Yes" || label === "Oui") {
@@ -297,10 +393,17 @@ class EditPage extends React.Component {
             onClickHidePhoneCheck={this.onClickHidePhoneCheck}
             onClickMarketingCheck={this.onClickMarketingCheck}
             handleLocationInputChange={this.handleLocationInputChange}
+            handleOwnerInputChange={this.handleOwnerInputChange}
+            handleOnSubmitForm={this.handleOnSubmitForm}
+            saving={this.state.saving}
           />
-          <MDBBtn color="success" type="submit">
-            Submit Form
-          </MDBBtn>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            closeButton={false}
+            newestOnTop={false}
+            rtl={false}>
+          </ToastContainer>
         </form>
       </MDBContainer>
     );

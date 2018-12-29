@@ -29,7 +29,7 @@ class ModelSelect extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { t,
+        const {
             selectedMarks,
             selectedModels
         } = nextProps;
@@ -40,20 +40,20 @@ class ModelSelect extends Component {
                 marks.push(this.state.marks.find(m => m.mark === sm));
             })
             if (marks) {
-                this.formatModelOptions(marks, selectedModels, t);
+                this.formatModelOptions(marks, selectedModels);
             }
         }
 
     }
 
-    formatModelOptions(selectedMarks, selectedModels, t) {
+    formatModelOptions(selectedMarks, selectedModels) {
         if (selectedMarks && selectedMarks.length > 0 && selectedMarks[0]) {
             this.setState((prevState) => {
                 let prevOptions = [...prevState.modelOptions];
                 selectedMarks.forEach((mark) => {
                     mark.models.forEach((model) => {
                         let option = {
-                            checked: selectedModels && selectedModels.includes(model.model) ? true : false,
+                            checked: selectedModels && selectedModels.includes(model) ? true : false,
                             disabled: false,
                             icon: null,
                             value: model

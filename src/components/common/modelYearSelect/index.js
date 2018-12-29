@@ -37,7 +37,7 @@ class ModelYear extends Component {
                 let prevOptions = [...prevState.yearOptions];
                 for (let i = 0; i < limit + 1; i++) {
                     let option = {
-                        checked: currentYear && currentYear - i === selectedYear ? true : false,
+                        checked: currentYear && selectedYear.includes(currentYear - i) ? true : false,
                         disabled: false,
                         icon: null,
                         value: (currentYear - i).toString()

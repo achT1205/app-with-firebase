@@ -18,6 +18,7 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                             <MarksSelect
                                 categories={[announcement.category]}
                                 handelMarksSelectChange={handelMarksSelectChange}
+                                selectedMarks={[announcement.criteria.mark]}
                                 multiple={false}
                                 search={true}
                                 hideLabe={true}
@@ -49,7 +50,7 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                             hideLabe={true}
                             selectedDefault={t('common.labels.year.select')}
                             label={t('common.labels.year.label')}
-                            selectedYear={[announcement.criteria.selectedYear]}
+                            selectedYear={[announcement.criteria.yearOfModel]}
                             yearLimit={30}
                             currentYear={2019}
                         />
@@ -95,9 +96,10 @@ const VehiculeCriteria = ({ announcement, handelMarksSelectChange, handelGearBox
                     <MDBCol md={[4].includes(announcement.category) ? '6' : '4'}>
                         <MDBInput
                             label={t('common.labels.mileage')}
+                            value = {announcement.criteria.mileage}
                             type="text"
                             name="mileage"
-                            onBlur={handleCriteriaInputChange} />
+                            onChange={handleCriteriaInputChange} />
                     </MDBCol>
                 }
             </MDBRow>
