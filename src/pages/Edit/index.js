@@ -118,7 +118,7 @@ class EditPage extends React.Component {
 
   addAnnouncement = announcement => {
     const announcements = { ...this.state.announcements }
-    let id = `announcement-${Date.now()}`;
+    let id = this.props.match.params.id ? this.props.match.params.id :`announcement-${Date.now()}`;
     announcement.id = id;
     announcement.createAt = Date();
     announcements[id] = announcement;
