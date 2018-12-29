@@ -120,6 +120,7 @@ class Header extends Component {
                                         <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" className="rounded-circle z-depth-0" style={{ height: "35px", padding: 0 }} alt="" />
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-default" right>
+                                        <DropdownItem href="/manage">Manage</DropdownItem>
                                         <DropdownItem href="#!">{t('header.nav.menus.profile.account')}</DropdownItem>
                                         <DropdownItem href="#!"> {t('header.nav.menus.profile.logout')}</DropdownItem>
                                     </DropdownMenu>
