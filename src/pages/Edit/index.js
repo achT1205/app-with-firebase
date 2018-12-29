@@ -1,12 +1,21 @@
 import React from "react";
 import { MDBContainer, toast, ToastContainer } from "mdbreact";
-import Form from '../../components/Form'
+import Form from '../../components/Form';
+import EndCreateUpdate from '../../components/modals/EndCreateUpdate';
 import categoryArray from './categories';
+import { DateTime } from "luxon";
 // Firebase
-import base from '../../base'
+import base from '../../base';
+import createHistory from 'history/createBrowserHistory';
+const history = createHistory({ forceRefresh: true })
+
+const handleRedirect = (path, id) => {
+  history.push(`/${path}/${id}`);
+}
 
 class EditPage extends React.Component {
   state = {
+    modal: false,
     saving: false,
     announcements: {},
     announcement: {
@@ -118,19 +127,17 @@ class EditPage extends React.Component {
 
   addAnnouncement = announcement => {
     const announcements = { ...this.state.announcements }
-    let id = this.props.match.params.id ? this.props.match.params.id :`announcement-${Date.now()}`;
+    let id = this.props.match.params.id ? this.props.match.params.id : `announcement-${Date.now()}`;
     announcement.id = id;
-    announcement.createAt = Date();
+    if (this.props.match.params.id) {
+      announcement.lastModifDate = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
+    } else {
+      announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
+    }
     announcements[id] = announcement;
     this.setState({ announcements });
     this.setState({ saving: false });
-    let message = this.props.match.params.id ? "Your post has been updated succefuly :)" 
-    : "Your post has been create succefuly :)";
-    toast.success(message, {
-      position: "top-right",
-      autoClose: 5000,
-      closeButton: true,
-    });
+    this.toggle();
   }
 
   handleInputChange = (event) => {
@@ -298,7 +305,27 @@ class EditPage extends React.Component {
     let announcement = this.state.announcement;
     announcement.owner[field] = event.target.value;
     this.setState({ announcement: Object.assign({}, announcement) });
-}
+  }
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  EndCreateUpdateActions = (action) => {
+    switch (action) {
+      case 1:
+        handleRedirect("create", '')
+        break;
+      case 2:
+        if (this.state.announcement.id) { this.toggle() }
+        else { handleRedirect("edit", this.state.announcement.id) }
+        break;
+      case 3:
+        handleRedirect("manage", '')
+    }
+  }
 
 
   swimingPoolOptionId(label) {
@@ -403,6 +430,12 @@ class EditPage extends React.Component {
             handleOwnerInputChange={this.handleOwnerInputChange}
             handleOnSubmitForm={this.handleOnSubmitForm}
             saving={this.state.saving}
+          />
+          <EndCreateUpdate
+            modal={this.state.modal}
+            toggle={this.toggle}
+            isUpdating={this.props.match.params.id ? true : false}
+            actions={this.EndCreateUpdateActions}
           />
           <ToastContainer
             position="top-right"

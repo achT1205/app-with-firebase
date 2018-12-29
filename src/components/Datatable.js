@@ -1,8 +1,15 @@
 import React from 'react';
-import { MDBDataTable } from 'mdbreact';
+import { MDBDataTable, MDBIcon } from 'mdbreact';
 
-const Datatable = ({ announcements }) => {
-    
+const Datatable = ({ announcements, handleEdit, handleDelete }) => {
+
+    const formateCover = url => <img src={url} alt="thumbnail" className="img-thumbnail" />;
+    const formateActions = id =>
+        <div className="form-inline">
+            <MDBIcon onClick={() => handleEdit(id)} icon="edit" size="lg" className="cyan-text" />
+            <MDBIcon onClick={() => handleDelete(id)} icon="times-circle-o" className="red-text ml-1" size="lg" />
+        </div>;
+
     const formatData = () => {
         const data = {
             columns: [
@@ -35,22 +42,31 @@ const Datatable = ({ announcements }) => {
                     field: 'date',
                     sort: 'asc',
                     width: 150
+                },
+                {
+                    label: 'Actions',
+                    field: 'actions',
+                    sort: 'asc',
+                    width: 300
                 }
             ],
             rows: []
         };
+
+
         Object.keys(announcements)
             .map(key => {
-                let row ={
-                    cover: <img src={announcements[key].pictures[0]} />,
+                let row = {
+                    cover: formateCover(announcements[key].pictures[0]),
                     title: announcements[key].title,
                     amount: announcements[key].amount,
                     description: announcements[key].description,
-                    date: announcements[key].createAt
+                    date: announcements[key].createAt,
+                    actions: formateActions(key)
                 }
                 data.rows.push(row)
             })
-            return data;
+        return data;
     }
 
     return (
@@ -58,6 +74,13 @@ const Datatable = ({ announcements }) => {
             striped
             bordered
             small
+            info={true}
+            order={['date', 'desc']}
+            searching={true}
+            infoLabel={["Showing", "to", "of", "entries"]}
+            paginationLabel={["Previous", "Next"]}
+            entriesLabel="Show entries"
+            searchLabel="Search"
             data={formatData()}
         />
     );

@@ -8,6 +8,7 @@
     "i18next": "^13.0.1",
     "i18next-browser-languagedetector": "^2.2.4",
     "i18next-xhr-backend": "^1.5.1",
+    "luxon": "^1.8.3",
     "mdbreact": "./mdbreact-4.8.4.tgz",
     "re-base": "^4.0.0",
     "react": "^16.5.0",

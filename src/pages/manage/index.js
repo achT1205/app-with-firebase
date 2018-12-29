@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
-import { Container } from 'mdbreact'
-import Datatable from '../../components/Datatable'
+import React, { Component } from 'react';
+import { Container } from 'mdbreact';
+import Datatable from '../../components/Datatable';
 
 // Firebase
-import base from '../../base'
+import base from '../../base';
+import createHistory from 'history/createBrowserHistory';
+const history = createHistory({ forceRefresh: true });
 
 class ManagePage extends Component {
   state = {
@@ -17,10 +19,23 @@ class ManagePage extends Component {
     });
   }
 
+  handleEdit = (id) => {
+    history.push(`/edit/${id}`);
+  }
+
+  handleDelete = (id) => {
+    let announcements = this.state.announcements;
+    announcements[id] = null;
+    this.setState({announcements : announcements})
+  }
+
   render() {
     return (
       <Container>
-        <Datatable announcements ={this.state.announcements} />
+        <Datatable
+          handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
+          announcements={this.state.announcements} />
       </Container>
     )
   }
