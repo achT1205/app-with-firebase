@@ -18,6 +18,7 @@ import logo from "../../../flags/blank.gif";
 import "../../../flags/flags.min.css";
 import weDealLogo from '../../../logo.png'
 import { withNamespaces } from 'react-i18next';
+import './index.css'
 
 
 class Header extends Component {
@@ -107,7 +108,17 @@ class Header extends Component {
                                 <NavLink className="waves-effect waves-light" to="#!"><Fa icon="google-plus" /></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="waves-effect waves-light d-flex align-items-center" to="#!">1<Fa icon="envelope" className="ml-1" /></NavLink>
+                                <Dropdown>
+                                    <DropdownToggle className="dopdown-toggle" nav>
+                                        <span className="waves-effect waves-light d-flex align-items-center">
+                                            <Fa icon="bell" className="ml-1 mt-2" />
+                                            <span className="notif-label" color="danger" > 1290 </span>
+                                        </span>
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-default">
+                                        <DropdownItem href="#!">Notif #1</DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
                             </NavItem>
                             <NavItem>
                                 <div className="flags">
