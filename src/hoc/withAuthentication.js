@@ -10,37 +10,20 @@ const withAuthentication = WrappedComponent => (
             user: null,
             users: {}
         }
-
         componentDidMount() {
-            base.syncState('/users', {
-                context: this,
-                state: 'users'
-            });
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
-                    this.formateUser({ user })
+                  base.fetch(`users/${user.uid}`, {
+                    context: this,
+                    then(data) {
+                      if (data) {
+                        this.setState({ user });
+                      }
+                    }
+                  });
                 }
-            });
+              });
         }
-
-        formateUser = async authData => {
-            let user = await this.state.users[authData.user.uid];
-            if (!user || !user.id) {
-                let res = authData.user.displayName.split(" ");
-                user = {
-                    id: authData.user.uid,
-                    photoURL: authData.user.photoURL,
-                    phone: authData.user.phoneNumber,
-                    firstName: res[1],
-                    lastName: res[0],
-                    displayName: authData.user.displayName,
-                    emailVerified: authData.user.emailVerified,
-                    email: authData.user.email
-                }
-            }
-            this.setState({ user });
-        }
-
         render() {
             return (
                 <WrappedComponent

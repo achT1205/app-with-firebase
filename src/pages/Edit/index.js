@@ -94,27 +94,29 @@ class EditPage extends React.Component {
       context: this,
       state: 'announcements'
     });
-    /* base.syncState('/users', {
-       context: this,
-       state: 'users'
-     });*/
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-       // this.formateUser({ user })
+        base.fetch(`users/${user.uid}`, {
+          context: this,
+          then(data) {
+            if (data) {
+              this.formateUser(user);
+            }
+          }
+        });
       }
     });
   }
 
- /* formateUser = async authData => {
-    let user = {}//await this.state.users[authData.user.uid];
+  formateUser = async user => {
     let announcement = this.state.announcement;
-    announcement.owner.id = user && user.id ? user.id : authData.user.uid;
-    announcement.owner.profileUrl = user && user.photoURL ? user.photoURL : authData.user.photoURL;
-    announcement.owner.phone = user && user.phone ? user.phone : authData.user.phone;
-    announcement.owner.name = user && user.displayName ? user.displayName : authData.user.displayName;
-    announcement.owner.email = user && user.email ? user.email : authData.user.email;
-    this.setState({ user });
-  }*/
+    announcement.owner.id = user.uid;
+    announcement.owner.profileUrl = user.photoURL;
+    announcement.owner.phone = user.phone ? user.phone :"";
+    announcement.owner.name = user.displayName;
+    announcement.owner.email = user.email;
+    this.setState({ announcement });
+  }
 
   componentDidUpdate() {
     if (this.state.announcements && this.props.match.params.id && !this.state.announcement.id) {
@@ -172,7 +174,7 @@ class EditPage extends React.Component {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     }
     announcements[id] = announcement;
-    this.setState({ announcements: announcements, saving: false , modal :false});
+    this.setState({ announcements: announcements, saving: false, modal: false });
   }
 
   handleInputChange = (event) => {
