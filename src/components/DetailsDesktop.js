@@ -4,7 +4,7 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCol, MDBRow, MDBCon
 import DetailsCarousel from './DetailsCarousel';
 import DetailsAccordion from './DetailsAccordion';
 import DetailsContact from './DetailsContact';
-import RelatedAnnouncements from './RelatedAnnouncements';
+//import RelatedAnnouncements from './RelatedAnnouncements';
 const DetailsDesktop = props => {
     const { announcement, onSendingEmailm } = props;
     return (

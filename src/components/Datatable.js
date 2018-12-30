@@ -3,12 +3,18 @@ import { MDBDataTable, MDBIcon } from 'mdbreact';
 
 const Datatable = ({ announcements, handleEdit, handleDelete }) => {
 
-    const formateCover = url => <img src={url} alt="thumbnail" className="img-thumbnail" />;
-    const formateActions = id =>
-        <div className="form-inline">
-            <MDBIcon onClick={() => handleEdit(id)} icon="edit" size="lg" className="cyan-text" />
-            <MDBIcon onClick={() => handleDelete(id)} icon="times-circle-o" className="red-text ml-1" size="lg" />
-        </div>;
+    const formateCover = url => {
+        return <img src={url} alt="thumbnail" className="img-thumbnail" />
+    };
+    const formateActions = id => {
+        return (
+            <div className="form-inline">
+                <MDBIcon onClick={() => handleEdit(id)} icon="edit" size="lg" className="cyan-text" />
+                <MDBIcon onClick={() => handleDelete(id)} icon="times-circle-o" className="red-text ml-1" size="lg" />
+            </div>
+        )
+
+    };
 
     const formatData = () => {
         const data = {

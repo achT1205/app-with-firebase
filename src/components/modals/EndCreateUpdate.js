@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter , actions} from 'mdbreact';
+import { Button, Modal, ModalBody, ModalHeader, ModalFooter} from 'mdbreact';
 import { withNamespaces } from 'react-i18next';
 
 const EndCreateUpdate = ({ toggle, modal, isUpdating , actions}) => {

@@ -4,8 +4,12 @@ import Form from '../../components/Form';
 import EndCreateUpdate from '../../components/modals/EndCreateUpdate';
 import categoryArray from './categories';
 import { DateTime } from "luxon";
+
 // Firebase
 import base from '../../base';
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 import createHistory from 'history/createBrowserHistory';
 const history = createHistory({ forceRefresh: true })
 
@@ -17,6 +21,8 @@ class EditPage extends React.Component {
   state = {
     modal: false,
     saving: false,
+    user: null,
+    users: {},
     announcements: {},
     announcement: {
       id: null,
@@ -88,7 +94,27 @@ class EditPage extends React.Component {
       context: this,
       state: 'announcements'
     });
+    /* base.syncState('/users', {
+       context: this,
+       state: 'users'
+     });*/
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+       // this.formateUser({ user })
+      }
+    });
   }
+
+ /* formateUser = async authData => {
+    let user = {}//await this.state.users[authData.user.uid];
+    let announcement = this.state.announcement;
+    announcement.owner.id = user && user.id ? user.id : authData.user.uid;
+    announcement.owner.profileUrl = user && user.photoURL ? user.photoURL : authData.user.photoURL;
+    announcement.owner.phone = user && user.phone ? user.phone : authData.user.phone;
+    announcement.owner.name = user && user.displayName ? user.displayName : authData.user.displayName;
+    announcement.owner.email = user && user.email ? user.email : authData.user.email;
+    this.setState({ user });
+  }*/
 
   componentDidUpdate() {
     if (this.state.announcements && this.props.match.params.id && !this.state.announcement.id) {
@@ -111,18 +137,29 @@ class EditPage extends React.Component {
   }
 
   handleOnSubmitForm = (event) => {
-    event.preventDefault();
-    if (!this.AnnouncementFromISValid()) {
-      toast.error("You must fell all teh required fields :(", {
-        position: "top-right",
-        autoClose: 5000,
-        closeButton: true,
-      });
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        event.persist();
+        if (!this.AnnouncementFromISValid()) {
+          toast.error("You must fell all teh required fields :(", {
+            position: "top-right",
+            autoClose: 5000,
+            closeButton: true,
+          });
+          return;
+        }
+        this.setState({ saving: true });
+        this.addAnnouncement(this.state.announcement);
+      }
+      else {
+        toast.error("You must connect to continue :(", {
+          position: "top-right",
+          autoClose: 5000,
+          closeButton: true,
+        });
+      }
+    })
 
-      return;
-    }
-    this.setState({ saving: true });
-    this.addAnnouncement(this.state.announcement);
   }
 
   addAnnouncement = announcement => {
@@ -135,9 +172,7 @@ class EditPage extends React.Component {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     }
     announcements[id] = announcement;
-    this.setState({ announcements });
-    this.setState({ saving: false });
-    this.toggle();
+    this.setState({ announcements: announcements, saving: false , modal :false});
   }
 
   handleInputChange = (event) => {
@@ -449,5 +484,4 @@ class EditPage extends React.Component {
     );
   }
 }
-
 export default EditPage;

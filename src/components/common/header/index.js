@@ -11,6 +11,7 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
+    MDBBtn,
     Fa
 } from "mdbreact";
 import logo from "../../../flags/blank.gif";
@@ -37,7 +38,7 @@ class Header extends Component {
 
     render() {
 
-        const { handleChange, t } = this.props;
+        const { handleChange, t, signIn, user, logout } = this.props;
         const overlay = (
             <div
                 id="sidenav-overlay"
@@ -114,18 +115,26 @@ class Header extends Component {
                                     <img src={logo} onClick={() => handleChange("us")} className="flag flag-us" alt="English" />
                                 </div>
                             </NavItem>
-                            <NavItem>
-                                <Dropdown>
-                                    <DropdownToggle className="dopdown-toggle" nav>
-                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" className="rounded-circle z-depth-0" style={{ height: "35px", padding: 0 }} alt="" />
-                                    </DropdownToggle>
-                                    <DropdownMenu className="dropdown-default" right>
-                                        <DropdownItem href="/manage">Manage</DropdownItem>
-                                        <DropdownItem href="#!">{t('header.nav.menus.profile.account')}</DropdownItem>
-                                        <DropdownItem href="#!"> {t('header.nav.menus.profile.logout')}</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            </NavItem>
+                            {(!user || !user.id) &&
+                                <NavItem>
+                                    <MDBBtn rounded color="info" size="sm" onClick={signIn}>LOG IN <Fa icon="sign-in" /></MDBBtn>
+                                </NavItem>
+                            }
+
+                            {user && user.id &&
+                                <NavItem>
+                                    <Dropdown>
+                                        <DropdownToggle className="dopdown-toggle" nav>
+                                            <img src={user.photoURL} className="rounded-circle z-depth-0" style={{ height: "35px", padding: 0 }} alt="" />
+                                        </DropdownToggle>
+                                        <DropdownMenu className="dropdown-default" right>
+                                            <DropdownItem href={`users/${user.id}`}>{t('header.nav.menus.profile.account')}</DropdownItem>
+                                            <DropdownItem href="/manage">Manage</DropdownItem>
+                                            <DropdownItem onClick={logout}> {t('header.nav.menus.profile.logout')}</DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </NavItem>
+                            }
                         </NavbarNav>
                     </Collapse>
                 </Navbar>
