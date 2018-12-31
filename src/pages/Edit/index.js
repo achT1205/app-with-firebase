@@ -111,9 +111,9 @@ class EditPage extends React.Component {
   formateUser = async user => {
     let announcement = this.state.announcement;
     announcement.owner.id = user.uid;
-    announcement.owner.profileUrl = user.photoURL;
+    announcement.owner.profileUrl = user.photoURL ? user.photoURL :"";
     announcement.owner.phone = user.phone ? user.phone :"";
-    announcement.owner.name = user.displayName;
+    announcement.owner.name = user.displayName ?  user.displayName : "";
     announcement.owner.email = user.email;
     this.setState({ announcement });
   }
@@ -174,7 +174,7 @@ class EditPage extends React.Component {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     }
     announcements[id] = announcement;
-    this.setState({ announcements: announcements, saving: false, modal: false });
+    this.setState({ announcements: announcements, saving: false, modal: true });
   }
 
   handleInputChange = (event) => {

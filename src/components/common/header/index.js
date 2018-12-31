@@ -102,10 +102,17 @@ class Header extends Component {
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="waves-effect waves-light" to="#!"><Fa icon="twitter" /></NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink className="waves-effect waves-light" to="#!"><Fa icon="google-plus" /></NavLink>
+                                <Dropdown>
+                                    <DropdownToggle className="dopdown-toggle" nav>
+                                        <span className="waves-effect waves-light d-flex align-items-center">
+                                            <Fa icon="envelope" className="ml-1 mt-2" />
+                                            <span className="notif-label" color="danger" > 1290 </span>
+                                        </span>
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-default">
+                                        <DropdownItem href="#!">Notif #1</DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
                             </NavItem>
                             <NavItem>
                                 <Dropdown>
@@ -136,7 +143,7 @@ class Header extends Component {
                                 <NavItem>
                                     <Dropdown>
                                         <DropdownToggle className="dopdown-toggle" nav>
-                                            <img src={user.photoURL} className="rounded-circle z-depth-0" style={{ height: "35px", padding: 0 }} alt="" />
+                                            <img src={user.photoURL ? user.photoURL : 'http://placehold.it/50x50'} className="rounded-circle z-depth-0" style={{ height: "35px", padding: 0 }} alt="" />
                                         </DropdownToggle>
                                         <DropdownMenu className="dropdown-default" right>
                                             <DropdownItem href={`users/${user.id}`}>{t('header.nav.menus.profile.account')}</DropdownItem>
