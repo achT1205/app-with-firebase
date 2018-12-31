@@ -163,17 +163,16 @@ class EditPage extends React.Component {
   }
 
   addAnnouncement = announcement => {
-    const announcements = { ...this.state.announcements }
+   
     let id = this.props.match.params.id ? this.props.match.params.id : `announcement-${Date.now()}`;
     announcement.id = id;
     if (this.props.match.params.id) {
       announcement.lastModifDate = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     } else {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
-      announcement = this.uploadImages(announcement);
+      // announcement = this.uploadImages(announcement);
     }
-    announcements[id] = announcement;
-    this.setState({ announcements: announcements, saving: false, modal: true });
+    this.uploadImages(id, announcement);
   }
 
   handleInputChange = (event) => {
@@ -210,31 +209,29 @@ class EditPage extends React.Component {
     this.setState({ images: images })
   }
 
-  uploadImages = (announcement) => {
+  uploadImages = (id,announcement) => {
+    const announcements = { ...this.state.announcements }
     const { images } = this.state;
     if (images && images.length > 0) {
       images.forEach((image) => {
-        const uploadTask = storage.ref(`images/${image.id}`).put(image.file);
-        uploadTask.on('state_changed',
-          (snapshort) => {
-          },
-          (error) => {
-            let arr = JSON.parse(error.serverResponse);
-            toast.error(arr.error.message, {
-              position: "top-right",
-              autoClose: 5000,
-              closeButton: true,
-            });
-          },
-          () => {
-            storage.ref('images').child(images[0].name).getDownloadURL().then((url) => {
-              announcement.pictures.push(url);
-            })
+        storage.ref(`images/${image.id + image.file.name}`).put(image.file).then(() => {
+          storage.ref('images/').child(`${image.id + image.file.name}`).getDownloadURL().then((url) => {
+            debugger;
+            announcement.pictures.push(url);
           })
+        }).catch((error) => {
+          debugger;
+          console.log(error)
+        });
       });
+      announcements[id] = announcement;
+      this.setState({ announcements: announcements, saving: false, modal: true });
+      announcement.mainPicture = announcement.pictures[0];
     }
-    announcement.mainPicture = announcement.pictures[0];
-    return announcement;
+    else{
+      announcements[id] = announcement;
+      this.setState({ announcements: announcements, saving: false, modal: true });
+    }
   }
 
   handelCategorySelectChange = (value) => {
