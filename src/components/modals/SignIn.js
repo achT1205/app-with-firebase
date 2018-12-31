@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Modal, ModalBody, MDBContainer, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
 
 class SignInModal extends Component {
- 
   render() {
-    const { modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register , switchMode , signInMode} = this.props;
+    const { modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register, switchMode, signInMode, reset } = this.props;
     return (
       <Modal isOpen={modal} toggle={toggle}>
         <ModalBody>
@@ -12,8 +11,9 @@ class SignInModal extends Component {
             <MDBCardBody className="mx-4">
               <div className="text-center">
                 <h3 className="dark-grey-text mb-5">
-                  {signInMode && <strong>Sign in</strong>}
-                  {!signInMode && <strong>Sign up</strong>}
+                  {signInMode === 1 && <strong>Sign in</strong>}
+                  {signInMode === 2 && <strong>Sign up</strong>}
+                  {signInMode === 3 && <strong>Reset password</strong>}
                 </h3>
               </div>
               <MDBInput
@@ -27,17 +27,20 @@ class SignInModal extends Component {
                 error="wrong"
                 success="right"
               />
-              <MDBInput
-                label="Your password"
-                group
-                name="password"
-                type="password"
-                validate
-                value={credential.password}
-                onChange={handleCredentialChange}
-                containerClass="mb-0"
-              />
-              {!signInMode &&
+              {
+                [1, 2].includes(signInMode) &&
+                <MDBInput
+                  label="Your password"
+                  group
+                  name="password"
+                  type="password"
+                  validate
+                  value={credential.password}
+                  onChange={handleCredentialChange}
+                  containerClass="mb-0"
+                />
+              }
+              {signInMode === 2 &&
                 <div className="md-form pb-3">
                   <div className="form-check my-4">
                     <input
@@ -57,24 +60,25 @@ class SignInModal extends Component {
                   </div>
                 </div>
               }
-              {signInMode &&
-                <p className="font-small blue-text d-flex justify-content-end pb-3">
+              {signInMode === 1 &&
+                <p className="font-small blue-text d-flex justify-content-end pb-3"
+                  onClick={() => switchMode(3)}>
                   Forgot
                 <a href="#!" className="blue-text ml-1">
                     Password?
                 </a>
                 </p>
               }
-              {!signInMode &&
+              {signInMode === 2 &&
                 <p className="font-small grey-text d-flex justify-content-end">
                   Have an account?
-                <a onClick={switchMode} className="blue-text ml-1">
+                <a onClick={() => switchMode(1)} className="blue-text ml-1">
                     Log in
                 </a>
                 </p>
               }
               <div className="text-center mb-3">
-                {signInMode && <MDBBtn
+                {signInMode === 1 && <MDBBtn
                   type="button"
                   gradient="blue"
                   rounded
@@ -83,7 +87,7 @@ class SignInModal extends Component {
                 >
                   Sign in
                 </MDBBtn>}
-                {!signInMode && <MDBBtn
+                {signInMode === 2 && <MDBBtn
                   type="button"
                   gradient="blue"
                   rounded
@@ -91,6 +95,15 @@ class SignInModal extends Component {
                   onClick={register}
                 >
                   Sign up
+                </MDBBtn>}
+                {signInMode === 3 && <MDBBtn
+                  type="button"
+                  gradient="blue"
+                  rounded
+                  className="btn-block z-depth-1a"
+                  onClick={reset}
+                >
+                  Reset
                 </MDBBtn>}
               </div>
               <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
@@ -121,12 +134,21 @@ class SignInModal extends Component {
                 </MDBBtn>
               </div>
             </MDBCardBody>
-            {signInMode &&
+            {signInMode === 1 &&
               <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <p className="font-small grey-text d-flex justify-content-end">
                   Not a member?
-                <a onClick={switchMode} className="blue-text ml-1">
+                <a onClick={() => switchMode(2)} className="blue-text ml-1">
                     Sign Up
+                </a>
+                </p>
+              </MDBModalFooter>
+            }
+            {signInMode === 3 &&
+              <MDBModalFooter className="mx-5 pt-3 mb-1">
+                <p className="font-small grey-text d-flex justify-content-end">
+                  <a onClick={() => switchMode(1)} className="blue-text ml-1">
+                    Sign in now !
                 </a>
                 </p>
               </MDBModalFooter>

@@ -4,6 +4,7 @@ import CategorySelect from './common/categorySelect'
 import VehiculeCriteria from './common/vehiculeCriteria'
 import ImmovableCriteria from './common/immovableCriteria'
 import VacationCriteria from './common/vacationCriteria'
+import FileInput from '../components/common/fileInput'
 import { withNamespaces } from 'react-i18next';
 
 const Form = ({
@@ -15,6 +16,7 @@ const Form = ({
     onClickGenderRadio,
     handleLocationInputChange,
     fileInputHandler,
+    handleRemove,
     handleDescriptionInputChange,
     onClickTypeRadio,
     onClickProfileRadio,
@@ -33,7 +35,8 @@ const Form = ({
     handelMarksSelectChange,
     announcement,
     handleInputChange,
-    t
+    t,
+    images
 }) => {
     return (
         <Fragment>
@@ -158,7 +161,10 @@ const Form = ({
                         </MDBRow>
                         <MDBRow>
                             <MDBCol md="12">
-                                <input type="file" />
+                                <FileInput
+                                    fileInputHandler={fileInputHandler}
+                                    handleRemove={handleRemove}
+                                    images={images} />
                             </MDBCol>
                         </MDBRow>
                     </Fragment>

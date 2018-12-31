@@ -17,7 +17,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signInMode: true,
+      signInMode: 1,
       credential: {
         email: "",
         password: "",
@@ -38,7 +38,8 @@ class App extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal, 
+      signInModal: 1
     });
   }
 
@@ -96,7 +97,8 @@ class App extends Component {
     this.setState({
       currentUser: user || authData.user,
       isConnected: authData.user.uid ? true : false,
-      modal: false
+      modal: false,
+      SignInModal: 1
     });
   }
 
@@ -141,11 +143,7 @@ class App extends Component {
         })
         .catch((error) => {
           let errorMessage = error.message;
-          toast.error(errorMessage, {
-            position: "top-right",
-            autoClose: 5000,
-            closeButton: true,
-          });
+          this.renderErrorToast(errorMessage);
         });
     }
 
@@ -156,7 +154,7 @@ class App extends Component {
     await firebase.auth().signOut()
     this.setState({
       currentUser: null,
-      signInMode: true
+      signInMode: 1
     })
   }
 
@@ -203,40 +201,69 @@ class App extends Component {
         }
       }
     if (message) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        closeButton: true,
-      });
+      this.renderErrorToast(message);
       return false
     }
     return true;
   }
+
+  renderErrorToast = (message) => {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      closeButton: true,
+    });
+  }
+
+  renderSuccessToast = (message) => {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      closeButton: true,
+    });
+  }
+
+  renderInfoToast = (message) => {
+    toast.info(message, {
+      position: "top-right",
+      autoClose: 5000,
+      closeButton: true,
+    });
+  }
+
+  reset = () => {
+    let emailRegex = RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    if (!emailRegex.test(this.state.credential.email)) {
+      let message = this.buildValidationMessage("email");
+      this.renderErrorToast(message);
+    } else {
+      let auth = firebase.auth();
+      auth.sendPasswordResetEmail(this.state.credential.email).then(() => {
+        this.renderInfoToast("An email has been sent to your Email !")
+      }).catch((error) => {
+        this.renderErrorToast(error.message);
+      });
+    }
+
+  }
+
   register = () => {
     if (this.isCredentialValid()) {
       const { email, password } = this.state.credential;
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-          console.log(user)
-          toast.success("You are now registered :)", {
-            position: "top-right",
-            autoClose: 5000,
-            closeButton: true,
-          });
+        .then(() => {
+          this.renderSuccessToast("You are now registered :)");
+          this.setState({ SignInModal: 1 });
         })
         .catch((error) => {
           var errorMessage = error.message;
-          toast.error(errorMessage, {
-            position: "top-right",
-            autoClose: 5000,
-            closeButton: true,
-          });
+          this.renderErrorToast(errorMessage);
         });
     }
   }
 
-  switchMode = () => {
-    this.setState({ signInMode: !this.state.signInMode });
+  switchMode = (mode) => {
+    this.setState({ signInMode: mode });
   }
 
   render() {
@@ -258,6 +285,7 @@ class App extends Component {
               handleCredentialChange={this.handleCredentialChange}
               handleCredentialCheck={this.handleCredentialCheck}
               register={this.register}
+              reset={this.reset}
               switchMode={this.switchMode}
               signInMode={this.state.signInMode}
             />

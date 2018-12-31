@@ -7,8 +7,10 @@ import { DateTime } from "luxon";
 
 // Firebase
 import base from '../../base';
+import { storage } from '../../base'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+
 
 import createHistory from 'history/createBrowserHistory';
 const history = createHistory({ forceRefresh: true })
@@ -23,16 +25,12 @@ class EditPage extends React.Component {
     saving: false,
     user: null,
     users: {},
+    images: [],
     announcements: {},
     announcement: {
       id: null,
-      mainPicture: "http://placehold.it/708x472",
-      pictures: [
-        "https://via.placeholder.com/500x350",
-        "https://via.placeholder.com/500x350",
-        "https://via.placeholder.com/500x350",
-        "https://via.placeholder.com/500x350"
-      ],
+      mainPicture: "",
+      pictures: [],
       description: "",
       shortDescription: "",
       createAt: "",
@@ -111,9 +109,9 @@ class EditPage extends React.Component {
   formateUser = async user => {
     let announcement = this.state.announcement;
     announcement.owner.id = user.uid;
-    announcement.owner.profileUrl = user.photoURL ? user.photoURL :"";
-    announcement.owner.phone = user.phone ? user.phone :"";
-    announcement.owner.name = user.displayName ?  user.displayName : "";
+    announcement.owner.profileUrl = user.photoURL ? user.photoURL : "";
+    announcement.owner.phone = user.phone ? user.phone : "";
+    announcement.owner.name = user.displayName ? user.displayName : "";
     announcement.owner.email = user.email;
     this.setState({ announcement });
   }
@@ -172,6 +170,7 @@ class EditPage extends React.Component {
       announcement.lastModifDate = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     } else {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
+      announcement = this.uploadImages(announcement);
     }
     announcements[id] = announcement;
     this.setState({ announcements: announcements, saving: false, modal: true });
@@ -185,6 +184,57 @@ class EditPage extends React.Component {
     }
     announcement[field] = event.target.value;
     this.setState({ announcement: Object.assign({}, announcement) });
+  }
+
+  fileInputHandler = (event) => {
+    if (event.target.files[0]) {
+      let { images } = this.state;
+      console.log(event.target.files[0]);
+      let image = {
+        id: Date.now(),
+        file: event.target.files[0]
+      };
+      images.push(image);
+      this.setState({ images });
+    }
+
+  }
+
+  handleRemove = (id) => {
+    const images = this.state.images;
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].id === id) {
+        images.slice(i, 1);
+      }
+    }
+    this.setState({ images: images })
+  }
+
+  uploadImages = (announcement) => {
+    const { images } = this.state;
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        const uploadTask = storage.ref(`images/${image.id}`).put(image.file);
+        uploadTask.on('state_changed',
+          (snapshort) => {
+          },
+          (error) => {
+            let arr = JSON.parse(error.serverResponse);
+            toast.error(arr.error.message, {
+              position: "top-right",
+              autoClose: 5000,
+              closeButton: true,
+            });
+          },
+          () => {
+            storage.ref('images').child(images[0].name).getDownloadURL().then((url) => {
+              announcement.pictures.push(url);
+            })
+          })
+      });
+    }
+    announcement.mainPicture = announcement.pictures[0];
+    return announcement;
   }
 
   handelCategorySelectChange = (value) => {
@@ -467,6 +517,9 @@ class EditPage extends React.Component {
             handleOwnerInputChange={this.handleOwnerInputChange}
             handleOnSubmitForm={this.handleOnSubmitForm}
             saving={this.state.saving}
+            fileInputHandler={this.fileInputHandler}
+            handleRemove={this.handleRemove}
+            images={this.state.images}
           />
           <EndCreateUpdate
             modal={this.state.modal}
