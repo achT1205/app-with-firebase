@@ -90,26 +90,28 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
     }
 
     return (
-
-        <MDBCard>
-            <MDBCardBody className="py-0">
-                <MDBRow>
-                    <MDBDataTable
-                        striped
-                        bordered
-                        small
-                        info={true}
-                        order={['date', 'desc']}
-                        searching={true}
-                        infoLabel={["Showing", "to", "of", "entries"]}
-                        paginationLabel={["Previous", "Next"]}
-                        entriesLabel="Show entries"
-                        searchLabel="Search"
-                        data={formatData()}
-                    />
-                </MDBRow>
-            </MDBCardBody>
-        </MDBCard>
+        <Fragment>
+            {announcements && <MDBCard>
+                <MDBCardBody className="py-0">
+                    <MDBRow>
+                        <MDBDataTable
+                            striped
+                            bordered
+                            small
+                            info={true}
+                            order={['date', 'desc']}
+                            searching={true}
+                            infoLabel={["Showing", "to", "of", "entries"]}
+                            paginationLabel={["Previous", "Next"]}
+                            entriesLabel="Show entries"
+                            searchLabel="Search"
+                            data={formatData()}
+                        />
+                    </MDBRow>
+                </MDBCardBody>
+            </MDBCard>
+            }
+        </Fragment>
     );
 }
 

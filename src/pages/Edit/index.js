@@ -214,7 +214,7 @@ class EditPage extends React.Component {
       if (announcement.images[i].id === image.id) {
         var desertRef = storage.ref('images/').child(`${image.id + image.name}`);
         desertRef.delete().then(() => {
-          announcement.images.slice(i, 1);
+          announcement.images[i] = null;
           this.setState({ announcements })
         }).catch((error) => {
           console.log(error)
