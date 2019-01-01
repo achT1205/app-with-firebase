@@ -11,7 +11,7 @@ const RowCard = ( props) => {
     <MDBCardImage
       cascade
       top
-      src={announcement.mainPicture}
+      src={announcement.images[0].url}
       alt={announcement.title}
     />
     <MDBCardBody cascade>

@@ -1,10 +1,24 @@
-import React from 'react';
-import { MDBDataTable, MDBIcon } from 'mdbreact';
+import React, { Fragment } from 'react';
+import { MDBDataTable, MDBIcon, MDBRow, MDBCard, MDBCardBody } from 'mdbreact';
 
 const Datatable = ({ announcements, handleEdit, handleDelete }) => {
 
     const formateCover = url => {
-        return <img src={url} alt="thumbnail" className="img-thumbnail" />
+        return (
+            <div className="mdb-feed">
+                <div className="news">
+                    <div className="excerpt">
+                        <div className="added-images">
+                            <img
+                                src={url}
+                                alt=""
+                                className="z-depth-1 rounded mb-md-0 mb-2"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     };
     const formateActions = id => {
         return (
@@ -23,7 +37,7 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
                     label: 'Cover',
                     field: 'cover',
                     sort: 'asc',
-                    width: 100
+                    width: 300
                 },
                 {
                     label: 'Title',
@@ -63,7 +77,7 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
         Object.keys(announcements)
             .map(key => {
                 let row = {
-                    cover: formateCover(announcements[key].pictures[0]),
+                    cover: formateCover(announcements[key].images[0].url),
                     title: announcements[key].title,
                     amount: announcements[key].amount,
                     description: announcements[key].description,
@@ -76,19 +90,26 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
     }
 
     return (
-        <MDBDataTable
-            striped
-            bordered
-            small
-            info={true}
-            order={['date', 'desc']}
-            searching={true}
-            infoLabel={["Showing", "to", "of", "entries"]}
-            paginationLabel={["Previous", "Next"]}
-            entriesLabel="Show entries"
-            searchLabel="Search"
-            data={formatData()}
-        />
+
+        <MDBCard>
+            <MDBCardBody className="py-0">
+                <MDBRow>
+                    <MDBDataTable
+                        striped
+                        bordered
+                        small
+                        info={true}
+                        order={['date', 'desc']}
+                        searching={true}
+                        infoLabel={["Showing", "to", "of", "entries"]}
+                        paginationLabel={["Previous", "Next"]}
+                        entriesLabel="Show entries"
+                        searchLabel="Search"
+                        data={formatData()}
+                    />
+                </MDBRow>
+            </MDBCardBody>
+        </MDBCard>
     );
 }
 

@@ -20,7 +20,7 @@ const DetailsDesktop = props => {
                                 </MDBCardText>
                                 <MDBRow>
                                     <MDBCol sm="7">
-                                        <DetailsCarousel images={announcement.pictures} />
+                                        <DetailsCarousel images={announcement.images} />
                                     </MDBCol>
                                     <MDBCol sm="1"></MDBCol>
                                     <MDBCol sm="4">

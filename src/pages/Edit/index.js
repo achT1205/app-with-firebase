@@ -30,7 +30,7 @@ class EditPage extends React.Component {
     announcement: {
       id: null,
       mainPicture: "",
-      pictures: [],
+      images: [],
       description: "",
       shortDescription: "",
       createAt: "",
@@ -163,7 +163,7 @@ class EditPage extends React.Component {
   }
 
   addAnnouncement = announcement => {
-   
+
     let id = this.props.match.params.id ? this.props.match.params.id : `announcement-${Date.now()}`;
     announcement.id = id;
     if (this.props.match.params.id) {
@@ -208,27 +208,44 @@ class EditPage extends React.Component {
     }
     this.setState({ images: images })
   }
+  handleRemovePicture = (image) => {
+    let { announcement, announcements } = this.state;
+    for (let i = 0; i < announcement.images.length; i++) {
+      if (announcement.images[i].id === image.id) {
+        var desertRef = storage.ref('images/').child(`${image.id + image.name}`);
+        desertRef.delete().then(() => {
+          announcement.images.slice(i, 1);
+          this.setState({ announcements })
+        }).catch((error) => {
+          console.log(error)
+        });
+      }
+    }
+  }
 
-  uploadImages = (id,announcement) => {
+
+  uploadImages = (id, announcement) => {
     const announcements = { ...this.state.announcements }
     const { images } = this.state;
     if (images && images.length > 0) {
       images.forEach((image) => {
         storage.ref(`images/${image.id + image.file.name}`).put(image.file).then(() => {
           storage.ref('images/').child(`${image.id + image.file.name}`).getDownloadURL().then((url) => {
-            debugger;
-            announcement.pictures.push(url);
+            let picture = {
+              id: image.id,
+              name: image.file.name,
+              url: url
+            }
+            announcement.images.push(picture);
+            announcements[id] = announcement;
+            this.setState({ announcements: announcements, saving: false, modal: true });
           })
         }).catch((error) => {
-          debugger;
           console.log(error)
         });
       });
-      announcements[id] = announcement;
-      this.setState({ announcements: announcements, saving: false, modal: true });
-      announcement.mainPicture = announcement.pictures[0];
     }
-    else{
+    else {
       announcements[id] = announcement;
       this.setState({ announcements: announcements, saving: false, modal: true });
     }
@@ -516,6 +533,7 @@ class EditPage extends React.Component {
             saving={this.state.saving}
             fileInputHandler={this.fileInputHandler}
             handleRemove={this.handleRemove}
+            handleRemovePicture={this.handleRemovePicture}
             images={this.state.images}
           />
           <EndCreateUpdate

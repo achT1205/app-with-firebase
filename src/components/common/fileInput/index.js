@@ -14,11 +14,17 @@ class FileInput extends Component {
     }
 
     render() {
-        const { fileInputHandler, images, handleRemove } = this.props;
+        const { fileInputHandler, images, handleRemove,handleRemovePicture, pictures } = this.props;
         return (
             <Fragment>
                 <input type="file" onChange={fileInputHandler} />
                 <MDBRow className="mt-5">
+                {pictures.map(picture => (
+                        <MDBChip
+                            close handleClose={() => handleRemovePicture(picture)}
+                            key={picture.id} size="md" src={picture.url} alt="Contact Person" waves>
+                        </MDBChip>
+                    ))}
                     {images.map(image => (
                         <MDBChip
                             close handleClose={() => handleRemove(image.id)}

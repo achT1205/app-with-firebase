@@ -35,6 +35,7 @@ const Form = ({
     handelMarksSelectChange,
     announcement,
     handleInputChange,
+    handleRemovePicture,
     t,
     images
 }) => {
@@ -164,7 +165,9 @@ const Form = ({
                                 <FileInput
                                     fileInputHandler={fileInputHandler}
                                     handleRemove={handleRemove}
-                                    images={images} />
+                                    handleRemovePicture={handleRemovePicture}
+                                    images={images}
+                                    pictures={announcement.images} />
                             </MDBCol>
                         </MDBRow>
                     </Fragment>
