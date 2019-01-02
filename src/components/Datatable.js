@@ -77,7 +77,7 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
         Object.keys(announcements)
             .map(key => {
                 let row = {
-                    cover: formateCover(announcements[key].images[0].url),
+                    cover: formateCover(announcements[key].images[0].thumb),
                     title: announcements[key].title,
                     amount: announcements[key].amount,
                     description: announcements[key].description,

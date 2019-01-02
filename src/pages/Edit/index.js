@@ -229,12 +229,14 @@ class EditPage extends React.Component {
     const { images } = this.state;
     if (images && images.length > 0) {
       images.forEach((image) => {
-        storage.ref(`images/${image.id + image.file.name}`).put(image.file).then(() => {
-          storage.ref('images/').child(`${image.id + image.file.name}`).getDownloadURL().then((url) => {
+        let fullName = image.id + image.file.name;
+        storage.ref(`images/${fullName}`).put(image.file).then(() => {
+          storage.ref('images/').child(`${fullName}`).getDownloadURL().then((url) => {
             let picture = {
               id: image.id,
               name: image.file.name,
-              url: url
+              url: url,
+              thumb: url.replace(fullName, "thumb_" + fullName)
             }
             announcement.images.push(picture);
             announcements[id] = announcement;
