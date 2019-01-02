@@ -239,6 +239,7 @@ class EditPage extends React.Component {
               thumb: url.replace(fullName, "thumb_" + fullName)
             }
             announcement.images.push(picture);
+            debugger;
             announcements[id] = announcement;
             this.setState({ announcements: announcements, saving: false, modal: true });
           })
