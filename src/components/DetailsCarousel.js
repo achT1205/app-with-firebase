@@ -10,7 +10,7 @@ const DetailsCarousel = (props) => {
           images.map((image, index) =>
             <CarouselItem itemId={index + 1} key={index}>
               <View>
-                <img className="d-block w-100" src={image.thumb} alt="slide" />
+                <img className="d-block w-100" src={image.url} alt="slide" />
                 <Mask overlay="black-light" />
               </View>
             </CarouselItem>

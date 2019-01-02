@@ -223,11 +223,48 @@ class EditPage extends React.Component {
     }
   }
 
+  uploadImageAsPromise = (image, id, announcements, announcement) => {
+    let fullName = image.id + image.file.name;
+    let task = storage.ref(`images/${fullName}`).put(image.file);
+    return task.then(() => {
+      task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        let picture = {
+          id: image.id,
+          name: image.file.name,
+          url: downloadURL,
+          thumb: downloadURL.replace(fullName, "thumb_" + fullName)
+        }
+        announcement.images.push(picture);
+        announcements[id] = announcement;
+        this.setState({ announcements: announcements });
+      })
+    })
+  }
 
   uploadImages = (id, announcement) => {
     const announcements = { ...this.state.announcements }
     const { images } = this.state;
     if (images && images.length > 0) {
+      Promise.all(images.map(image => this.uploadImageAsPromise(image, id, announcements, announcement)))
+        .then(() => {
+          this.setState({ saving: false, modal: true })
+        })
+        .catch((error) => {
+          console.log(`Some failed: `, error.message)
+        });
+    }
+    else {
+      announcements[id] = announcement;
+      this.setState({ announcements: announcements, saving: false, modal: true });
+    }
+  }
+
+  /*
+   uploadImages = (id, announcement) => {
+    const announcements = { ...this.state.announcements }
+    const { images } = this.state;
+    if (images && images.length > 0) {
+      debugger;
       images.forEach((image) => {
         let fullName = image.id + image.file.name;
         storage.ref(`images/${fullName}`).put(image.file).then(() => {
@@ -253,6 +290,7 @@ class EditPage extends React.Component {
       this.setState({ announcements: announcements, saving: false, modal: true });
     }
   }
+  */
 
   handelCategorySelectChange = (value) => {
     let id = 0;
