@@ -3,7 +3,8 @@ import {
   MDBSelect
 } from "mdbreact";
 import { withNamespaces } from 'react-i18next';
-import getCategoryOptions from './categoryOptions'; 
+import getCategoryOptions from './categoryOptions';
+import './index.css';
 
 class CategorySelect extends Component {
   constructor(props) {
@@ -20,9 +21,11 @@ class CategorySelect extends Component {
     this.formatOptions(t, selectedValues)
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     const { t, selectedValues, lng, i18n } = nextProps;
-    if( selectedValues !== this.props.selectedValues){
+    let isEqual = this.isEqual(selectedValues, this.props.selectedValues);
+    if (!isEqual) {
+      debugger;
       let ops = getCategoryOptions(t);
       this.setState({ options: ops })
       this.formatOptions(t, selectedValues)
@@ -33,8 +36,19 @@ class CategorySelect extends Component {
       this.setState({ options: ops })
       this.formatOptions(t, selectedValues)
     }
-}
+  }
 
+  isEqual(array1 , array2){
+    if(array1.length !== array2.length){
+      return false
+    }
+    for (let i = 0; i < array1.length ; i++) {
+      if (array2[i] !== array1[i]) {
+        return false;
+      }
+    }
+    return true;
+  } 
   formatOptions(t, selectedValues) {
     this.setState(prevState => {
       let prevOptions = [...prevState.options];
@@ -50,7 +64,7 @@ class CategorySelect extends Component {
   }
 
   render() {
-    const { handelCategorySelectChange, multiple, search, hideLabe, label , selectedDefault} = this.props;
+    const { handelCategorySelectChange, multiple, search, hideLabe, label, selectedDefault } = this.props;
     return (
       <div>
         <MDBSelect getValue={handelCategorySelectChange}

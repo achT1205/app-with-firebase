@@ -1,6 +1,7 @@
 import React from "react";
 import {Container } from 'mdbreact'
 import ListRow from '../../components/ListRow'
+import Search from '../../components/Search'
 // Firebase
 import base from '../../base'
 
@@ -19,6 +20,7 @@ class ListPage extends React.Component {
     render() {
         return (
             <Container>
+                <Search/>
                 {this.state.announcements &&
                    <ListRow announcements={this.state.announcements} />
                 }

@@ -1,0 +1,10 @@
+.search{
+    position: absolute;
+    margin-top: 6px;
+}
+
+.btn-outline-default{
+    border: 2px solid #ced4da !important;
+    background-color: transparent !important;
+    color: #2bbbad !important;
+}
