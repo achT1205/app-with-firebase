@@ -33,9 +33,9 @@ class ModelSelect extends Component {
             selectedMarks,
             selectedModels
         } = nextProps;
-        this.setState({ modelOptions: [] });
-        if (selectedMarks !== this.props.selectedMarks) {
+        if ( !this.isEqual(selectedMarks, this.props.selectedMarks) || !this.isEqual(selectedModels, this.props.selectedModels)) {
             let marks = [];
+            this.setState({ modelOptions: [] });
             selectedMarks.forEach((sm) => {
                 marks.push(this.state.marks.find(m => m.mark === sm));
             })
@@ -43,7 +43,18 @@ class ModelSelect extends Component {
                 this.formatModelOptions(marks, selectedModels);
             }
         }
+    }
 
+    isEqual(array1, array2) {
+        if (array1.length !== array2.length) {
+            return false
+        }
+        for (let i = 0; i < array1.length; i++) {
+            if (array2[i] !== array1[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     formatModelOptions(selectedMarks, selectedModels) {
@@ -73,7 +84,7 @@ class ModelSelect extends Component {
             multiple,
             search,
             hideLabe,
-            label, 
+            label,
             selectedDefault
         } = this.props;
         return (
@@ -88,7 +99,7 @@ class ModelSelect extends Component {
                             options={this.state.modelOptions}
                             selected={selectedDefault}
                         />
-                         {!hideLabe && <label>
+                        {!hideLabe && <label>
                             {label}
                         </label>
                         }

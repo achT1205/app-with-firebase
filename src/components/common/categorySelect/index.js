@@ -25,7 +25,6 @@ class CategorySelect extends Component {
     const { t, selectedValues, lng, i18n } = nextProps;
     let isEqual = this.isEqual(selectedValues, this.props.selectedValues);
     if (!isEqual) {
-      debugger;
       let ops = getCategoryOptions(t);
       this.setState({ options: ops })
       this.formatOptions(t, selectedValues)
