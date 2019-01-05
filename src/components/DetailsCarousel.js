@@ -9,14 +9,14 @@ const DetailsCarousel = (props) => {
       length={images.length}
       showControls={true}
       showIndicators={true}
-      thumbnails={true}
+      thumbnails={false}
       className="z-depth-1">
       <CarouselInner>
         {images.length > 0 &&
           images.map((image, index) =>
             <CarouselItem itemId={index + 1} key={index}>
               <View>
-                <img className="d-block w-100" src={image.url} alt="slide" />
+                <img className="d-block w-100" src={image.thumb} alt="slide" />
                 <Mask overlay="black-light" />
               </View>
             </CarouselItem>
