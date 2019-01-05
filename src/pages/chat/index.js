@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import Profile from '../../components/Profile'
+import Chat from '../../components/Chat'
 import { Container } from 'mdbreact'
 import withAuthentication from '../../hoc/withAuthentication'
 
-class Account extends Component {
+class ChatPage extends Component {
   state = {
 
   }
@@ -11,11 +11,11 @@ class Account extends Component {
   render() {
     return (
       <Container>
-        <Profile user={this.props.user} />
+        <Chat user={this.props.user} />
       </Container>
     )
   }
 }
 
-const WrappedAccount = withAuthentication(Account)
-export default WrappedAccount
+const WrappedChatPage = withAuthentication(ChatPage)
+export default WrappedChatPage
