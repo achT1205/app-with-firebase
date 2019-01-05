@@ -55,3 +55,7 @@
 .fadeElement.fadeIn {
     height: 300px !important;
 }
+
+.required::after { 
+	content: "*";
+  }

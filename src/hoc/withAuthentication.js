@@ -17,7 +17,9 @@ const withAuthentication = WrappedComponent => (
                     context: this,
                     then(data) {
                       if (data) {
-                        this.setState({ user });
+                        this.setState({ user : data });
+                      }else{
+                        this.setState({ user : user });
                       }
                     }
                   });

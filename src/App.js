@@ -18,6 +18,7 @@ class App extends Component {
     super(props);
     this.state = {
       signInMode: 1,
+      passwordIndicator : '',
       credential: {
         email: "",
         password: "",
@@ -38,7 +39,7 @@ class App extends Component {
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal, 
+      modal: !this.state.modal,
       signInModal: 1
     });
   }
@@ -162,7 +163,26 @@ class App extends Component {
     let credential = this.state.credential;
     const field = event.target.name;
     credential[field] = event.target.value;
-    this.setState({ credential })
+    let passwordIndicator = '';
+    if (field === 'password') {
+      var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+      var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+      if (event.target.value) {
+        if (strongRegex.test(event.target.value)) {
+          passwordIndicator = 'success';
+        } else if (mediumRegex.test(event.target.value)) {
+          passwordIndicator = 'warning';
+        }
+        else {
+          passwordIndicator = 'danger';
+        }
+      }
+      else{
+        passwordIndicator = '';
+      }
+    }
+
+    this.setState({ credential , passwordIndicator : passwordIndicator})
   }
 
   handleCredentialCheck = () => {
@@ -288,6 +308,7 @@ class App extends Component {
               reset={this.reset}
               switchMode={this.switchMode}
               signInMode={this.state.signInMode}
+              passwordIndicator ={this.state.passwordIndicator}
             />
             <ToastContainer
               position="top-right"

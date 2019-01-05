@@ -96,8 +96,8 @@ class EditPage extends React.Component {
       if (user) {
         base.fetch(`users/${user.uid}`, {
           context: this,
-          then(data) {
-            if (data) {
+          then(user) {
+            if (user) {
               this.formateUser(user);
             }
           }

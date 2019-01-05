@@ -9,7 +9,6 @@ import DetailsPage from "./pages/details";
 import ManagePage from "./pages/manage"
 import AccountPage from "./pages/account"
 
-
 class Routes extends React.Component {
   render() {
     return (
@@ -21,6 +20,7 @@ class Routes extends React.Component {
         <Route path="/announcements" component={ListPage} />
         <Route path="/details/:id" component={DetailsPage} />
         <Route path="/manage" component={ManagePage} />
+        <Route path="/profile/:id" component={AccountPage} />
         <Route
           render={function () {
             return <h1>Not Found</h1>;

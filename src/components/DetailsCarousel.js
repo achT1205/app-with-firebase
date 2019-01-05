@@ -4,7 +4,13 @@ import { Carousel, CarouselInner, CarouselItem, View, Mask } from "mdbreact";
 const DetailsCarousel = (props) => {
   const { images } = props;
   return (
-    <Carousel activeItem={1} length={images.length} showControls={true} showIndicators={true} className="z-depth-1">
+    <Carousel
+      activeItem={1}
+      length={images.length}
+      showControls={true}
+      showIndicators={true}
+      thumbnails={true}
+      className="z-depth-1">
       <CarouselInner>
         {images.length > 0 &&
           images.map((image, index) =>

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Modal, ModalBody, MDBContainer, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
 
 class SignInModal extends Component {
   render() {
-    const { modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register, switchMode, signInMode, reset } = this.props;
+    const { passwordIndicator, modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register, switchMode, signInMode, reset } = this.props;
     return (
       <Modal isOpen={modal} toggle={toggle}>
         <ModalBody>
@@ -26,19 +26,102 @@ class SignInModal extends Component {
                 validate
                 error="wrong"
                 success="right"
+                required
               />
               {
                 [1, 2].includes(signInMode) &&
-                <MDBInput
-                  label="Your password"
-                  group
-                  name="password"
-                  type="password"
-                  validate
-                  value={credential.password}
-                  onChange={handleCredentialChange}
-                  containerClass="mb-0"
-                />
+                <Fragment>
+                  <MDBInput
+                    label="Your password"
+                    group
+                    name="password"
+                    type="password"
+                    validate
+                    value={credential.password}
+                    onChange={handleCredentialChange}
+                    containerClass="mb-0"
+                    required
+                  />
+                  {credential.password &&
+                    <Fragment>
+                      <h6>Your password must contains at least :</h6>
+                      <ul className="list-unstyled">
+                        <li>
+                          {! /[a-z]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="times-circle-o"
+                              className="red-text ml-1"
+                              size="sm" />
+                          }
+                          {/[a-z]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="check-circle"
+                              className="green-text ml-1"
+                              size="sm" />
+                          }
+                          <span className="ml-2">one lowercase alphabetical character</span></li>
+                        <li>
+                          {! /[A-Z]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="times-circle-o"
+                              className="red-text ml-1"
+                              size="sm" />
+                          }
+                          {/[A-Z]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="check-circle"
+                              className="green-text ml-1"
+                              size="sm" />
+                          }
+                          <span className="ml-2">one uppercase alphabetical character</span></li>
+                        <li>
+                          {!  /\d/.test(credential.password) &&
+                            <MDBIcon
+                              icon="times-circle-o"
+                              className="red-text ml-1"
+                              size="sm" />
+                          }
+                          {/\d/.test(credential.password) &&
+                            <MDBIcon
+                              icon="check-circle"
+                              className="green-text ml-1"
+                              size="sm" />
+                          }
+                          <span className="ml-2">one numeric character</span></li>
+                        <li>
+                          {!  /[$@$!%*?&\.;]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="times-circle-o"
+                              className="red-text ml-1"
+                              size="sm" />
+                          }
+                          {/[$@$!%*?&\.;]/.test(credential.password) &&
+                            <MDBIcon
+                              icon="check-circle"
+                              className="green-text ml-1"
+                              size="sm" />
+                          }
+                          <span className="ml-2">one special character</span></li>
+                        <li>
+                          {credential.password.length < 8 &&
+                            <MDBIcon
+                              icon="times-circle-o"
+                              className="red-text ml-1"
+                              size="sm" />
+                          }
+                          {credential.password.length >= 8 &&
+                            <MDBIcon
+                              icon="check-circle"
+                              className="green-text ml-1"
+                              size="sm" />
+                          }
+                          <span className="ml-2">must be eight characters or longer</span></li>
+                      </ul>
+
+                    </Fragment>
+
+                  }
+                </Fragment>
               }
               {signInMode === 2 &&
                 <div className="md-form pb-3">
@@ -51,7 +134,7 @@ class SignInModal extends Component {
                       onChange={handleCredentialCheck}
                       value={credential.act}
                     />
-                    <label htmlFor="defaultCheck12" className="grey-text">
+                    <label htmlFor="defaultCheck12" className="grey-text required">
                       Accept the
                     <a href="#!" className="blue-text">
                         Terms and Conditions
