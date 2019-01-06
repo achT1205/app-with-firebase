@@ -7,7 +7,7 @@ import { withNamespaces } from 'react-i18next';
 const RowCard = ( props) => {
   const {announcement , t, handleClick } = props;
   return (
-    <MDBCard narrow ecommerce className="mb-2 mt-5" onClick={() => handleClick(announcement.id)} >
+    <MDBCard narrow ecommerce className="mb-2 mt-5" onClick={() => handleClick(announcement)} >
     <MDBCardImage
       cascade
       top

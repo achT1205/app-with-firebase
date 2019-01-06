@@ -2,7 +2,7 @@ import React from "react";
 import { MDBRow, MDBCard, MDBCardBody, MDBIcon, MDBCol, Badge } from "mdbreact";
 
 const DetailsContact = (props) => {
-  const { owner, user } = props;
+  const { owner, user, redirectToProfile, redirectToChat } = props;
   return (
     <MDBRow>
       <MDBCol>
@@ -14,11 +14,12 @@ const DetailsContact = (props) => {
                 {user.isConnected === false && <Badge color="pink" pill>Off</Badge>}
               </div>
               <img
-                src={owner.profile}
+                src={user.photoURL}
                 alt=""
                 className="rounded-circle avatar-img z-depth-1-half"
+                onClick={redirectToProfile}
               />
-              {owner.name}
+              <a onClick={redirectToProfile}>{owner.name}</a>
             </div>
           </MDBCardBody>
 
@@ -66,6 +67,15 @@ const DetailsContact = (props) => {
                   <MDBIcon icon="instagram" />
                 </a>
               </li>
+              {
+                user.isConnected &&
+                <li className="list-inline-item" onClick={redirectToChat}>
+                  <a href="#!" className="p-2 fa-lg w-ic">
+                    <MDBIcon icon="comments-o" />
+                  </a>
+                </li>
+              }
+
             </ul>
           </MDBCardBody>
         </MDBCard>

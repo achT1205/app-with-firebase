@@ -4,9 +4,9 @@ import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCol, MDBRow, MDBCon
 import DetailsCarousel from './DetailsCarousel';
 import DetailsAccordion from './DetailsAccordion';
 import DetailsContact from './DetailsContact';
-//import RelatedAnnouncements from './RelatedAnnouncements';
+import RelatedAnnouncements from './RelatedAnnouncements';
 const DetailsDesktop = props => {
-    const { announcement, onSendingEmailm, user } = props;
+    const { announcement, onSendingEmailm, user, redirectToProfile, redirectToChat, relateds } = props;
     return (
         <section className="my-5">
             <MDBContainer>
@@ -24,7 +24,11 @@ const DetailsDesktop = props => {
                                     </MDBCol>
                                     <MDBCol sm="1"></MDBCol>
                                     <MDBCol sm="4">
-                                        <DetailsContact owner={announcement.owner} user={user}/>
+                                        <DetailsContact 
+                                        owner={announcement.owner} 
+                                        user={user}
+                                        redirectToProfile ={redirectToProfile}
+                                        redirectToChat ={redirectToChat}/>
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>
@@ -53,7 +57,7 @@ const DetailsDesktop = props => {
                     <MDBCol sm="12">
                         <MDBCard>
                             <MDBCardBody>
-                                {/*<RelatedAnnouncements announcements={announcement.owner.relateds} />*/}
+                                <RelatedAnnouncements announcements={relateds} />
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

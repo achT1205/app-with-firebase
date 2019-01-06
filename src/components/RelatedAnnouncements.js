@@ -19,8 +19,7 @@ const RelatedAnnouncements = (props) => {
       >
         <MDBCarouselInner>
           <MDBRow>
-            {length > 0 && <CarouselItem item={1} announcements={announcements.slice(0, 3)} />}
-            {length > 3 && <CarouselItem item={2} announcements={announcements.slice(3, 6)} />}
+            {length > 0 && <CarouselItem item={1} announcements={announcements} />}
           </MDBRow>
         </MDBCarouselInner>
       </MDBCarousel>

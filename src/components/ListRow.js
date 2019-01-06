@@ -4,8 +4,8 @@ import RowCard from './RowCard';
 import createHistory from 'history/createBrowserHistory';
 const history = createHistory({ forceRefresh: true })
 
-const handleClick = (id) => {
-    history.push(`/details/${id}`);
+const handleClick = (announcement) => {
+    history.push(`/details/${announcement.id}?ownerId=${announcement.ownerId}`);
 }
 
 const ListRow = ({ announcements } = this.props) => {
