@@ -11,15 +11,16 @@ const RelatedAnnouncements = (props) => {
       </h2>
       <MDBCarousel
         activeItem={1}
-        length={length/3}
-        slide={true}
-        showControls={true}
+        length={length / 3}
+        slide={length > 3 ? true: false}
+        showControls={length > 3 ? true: false}
         showIndicators={true}
         multiItem
       >
         <MDBCarouselInner>
           <MDBRow>
-            {length > 0 && <CarouselItem item={1} announcements={announcements} />}
+            {length > 0 && <CarouselItem item={1} announcements={announcements.slice(0, 3)} />}
+            {length > 3 && <CarouselItem item={2} announcements={announcements.slice(3, 6)} />}
           </MDBRow>
         </MDBCarouselInner>
       </MDBCarousel>

@@ -13,15 +13,18 @@ import {
   MDBScrollbar
 } from "mdbreact";
 import './chat.css';
+import withAuthentication from '../hoc/withAuthentication'
+import base from '../base'
 
 class Chat extends Component {
   constructor() {
     super();
     this.state = {
+      conversations: [],
       friends: [
         {
           name: "John Doe",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-8",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           message: "Hello, Are you there?",
           when: "Just now",
           toRespond: 1,
@@ -31,7 +34,7 @@ class Chat extends Component {
         {
           name: "Danny Smith",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-1",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "5 min ago",
           toRespond: 0,
           seen: false,
@@ -40,7 +43,7 @@ class Chat extends Component {
         {
           name: "Alex Steward",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-2",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "Yesterday",
           toRespond: 0,
           seen: false,
@@ -49,7 +52,7 @@ class Chat extends Component {
         {
           name: "Ashley Olsen",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-3",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "Yesterday",
           toRespond: 0,
           seen: false,
@@ -58,7 +61,7 @@ class Chat extends Component {
         {
           name: "Kate Moss",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-4",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "Yesterday",
           toRespond: 0,
           seen: true,
@@ -67,7 +70,7 @@ class Chat extends Component {
         {
           name: "Lara Croft",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-5",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "Yesterday",
           toRespond: 0,
           seen: false,
@@ -76,7 +79,7 @@ class Chat extends Component {
         {
           name: "Brad Pitt",
           message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-6",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "5 min ago",
           toRespond: 0,
           seen: true,
@@ -104,41 +107,62 @@ class Chat extends Component {
       messages: [
         {
           author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-6",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "12 mins ago",
           message:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
           author: "Lara Croft",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-5",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "13 mins ago",
           message:
             " Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
         },
         {
           author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-6",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "14 mins ago",
           message:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
           author: "Lara Croft",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-5",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "16 mins ago",
           message:
             " Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
         },
         {
           author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/avatar-6",
+          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
           when: "17 mins ago",
           message:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         }
       ]
     };
+  }
+
+  componentDidMount() {
+    if (this.props.user && this.props.user.id) {
+      base.syncState(`conversations/`, {
+        context: this,
+        asArray: true,
+        queries: {
+          orderByChild: 'senderId',
+          equalTo: this.props.user.id,
+        },
+        state: 'conversations'
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.conversations.length > 0) {
+      let selectedCoversation = this.state.conversations.find(c => c.id === this.props.match.params.id);
+      debugger
+    }
   }
 
   render() {
@@ -198,42 +222,42 @@ class Chat extends Component {
 const Friend = ({
   friend: { name, avatar, message, when, toRespond, seen, active }
 }) => (
-  <MDBListGroupItem
-    href="#!"
-    className="d-flex justify-content-between p-2 border-light"
-    style={{ backgroundColor: active ? "#eeeeee" : "" }}
-  >
-    <MDBAvatar
-      tag="img"
-      src={avatar}
-      alt="avatar"
-      circle
-      className="mr-2 z-depth-1"
-    />
-    <div style={{ fontSize: "0.95rem" }}>
-      <strong>{name}</strong>
-      <p className="text-muted">{message}</p>
-    </div>
-    <div>
-      <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
-        {when}
-      </p>
-      {seen ? (
-        <span className="text-muted float-right">
-          <MDBIcon className="fa-check" aria-hidden="true" />
-        </span>
-      ) : toRespond ? (
-        <MDBBadge color="danger" className="float-right">
-          {toRespond}
-        </MDBBadge>
-      ) : (
-        <span className="text-muted float-right">
-          <MDBIcon className="fa-mail-reply" aria-hidden="true" />
-        </span>
-      )}
-    </div>
-  </MDBListGroupItem>
-);
+    <MDBListGroupItem
+      href="#!"
+      className="d-flex justify-content-between p-2 border-light"
+      style={{ backgroundColor: active ? "#eeeeee" : "" }}
+    >
+      <MDBAvatar
+        tag="img"
+        src={avatar}
+        alt="avatar"
+        circle
+        className="mr-2 z-depth-1"
+      />
+      <div style={{ fontSize: "0.95rem" }}>
+        <strong>{name}</strong>
+        <p className="text-muted">{message}</p>
+      </div>
+      <div>
+        <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
+          {when}
+        </p>
+        {seen ? (
+          <span className="text-muted float-right">
+            <MDBIcon className="fa-check" aria-hidden="true" />
+          </span>
+        ) : toRespond ? (
+          <MDBBadge color="danger" className="float-right">
+            {toRespond}
+          </MDBBadge>
+        ) : (
+              <span className="text-muted float-right">
+                <MDBIcon className="fa-mail-reply" aria-hidden="true" />
+              </span>
+            )}
+      </div>
+    </MDBListGroupItem>
+  );
 
 const ChatMessage = ({ message: { author, avatar, when, message } }) => (
   <li className="chat-message d-flex justify-content-between mb-4">
@@ -259,4 +283,5 @@ const ChatMessage = ({ message: { author, avatar, when, message } }) => (
   </li>
 );
 
-export default Chat;
+const WrappedChat = withAuthentication(Chat)
+export default WrappedChat;

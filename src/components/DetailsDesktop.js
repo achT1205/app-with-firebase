@@ -24,11 +24,11 @@ const DetailsDesktop = props => {
                                     </MDBCol>
                                     <MDBCol sm="1"></MDBCol>
                                     <MDBCol sm="4">
-                                        <DetailsContact 
-                                        owner={announcement.owner} 
-                                        user={user}
-                                        redirectToProfile ={redirectToProfile}
-                                        redirectToChat ={redirectToChat}/>
+                                        <DetailsContact
+                                            owner={announcement.owner}
+                                            user={user}
+                                            redirectToProfile={redirectToProfile}
+                                            redirectToChat={redirectToChat} />
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>

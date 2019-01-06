@@ -1,7 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import DetailsDesktop from '../../components/DetailsDesktop'
+import withAuthentication from '../../hoc/withAuthentication'
+import { DateTime } from "luxon";
+import { toast, ToastContainer } from "mdbreact";
 // Firebase
 import base from '../../base'
+import 'firebase/auth'
 import createHistory from 'history/createBrowserHistory';
 const history = createHistory({ forceRefresh: true });
 
@@ -9,8 +13,8 @@ class DetailsPage extends Component {
     state = {
         announcement: {},
         user: {},
-        relateds: [], 
-        chats:[]
+        relateds: [],
+        chats: []
     }
 
     componentDidMount() {
@@ -30,34 +34,74 @@ class DetailsPage extends Component {
         }
     }
 
-    redirectToProfile=()=>{
+    redirectToProfile = () => {
         history.push(`/users/${this.state.announcement.ownerId}`);
     }
 
-    redirectToChat=()=>{
-        history.push(`/chats/${this.state.announcement.ownerId}`);
+    redirectToChat = () => {
+        if (this.props.user && this.props.user.isConnected) {
+            base.fetch(`conversations/${this.state.announcement.id}`, {
+                context: this,
+                then(conversation) {
+                    if (conversation && conversation.id) {
+                        history.push(`/chats/${conversation.id}`);
+                    } else {
+                        let newConversation = {
+                            id: this.state.announcement.id,
+                            senderId: this.props.user.id,
+                            recipientId: this.state.user.id,
+                            senderName: this.props.user.displayName,
+                            recipientName: this.state.user.displayName,
+                            senderAvatar: this.props.user.photoURL,
+                            recipientAvatar: this.state.user.photoURL,
+                            message: "Hello, Are you there?",
+                            createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+                            toRespond: 1,
+                            seen: false,
+                            active: false
+                        }
+                        base.post(`/conversations/${this.state.announcement.id}`, {
+                            data: newConversation,
+                        });
+
+                        history.push(`/chats/${this.state.announcement.id}`)
+                    }
+                }
+            });
+        }
+        else {
+            toast.error("You must sign in to continue :(", {
+                position: "top-right",
+                autoClose: 5000,
+                closeButton: true,
+            });
+        }
     }
 
     onSendingEmailm = () => {
 
     }
 
-    render() {
-        let relateds = [];
-        if (this.state.announcement.ownerId) {
-            base.fetch(`announcements`, {
-                context: this,
-                asArray: true,
-                queries: {
-                    orderByChild: 'ownerId',
-                    equalTo: this.state.announcement.ownerId,
-                    limitToLast: 3
-                },
-                then(data) {
-                    relateds = data;
-                }
-            });
+    componentDidUpdate() {
+        if (this.state.announcement.ownerId && this.state.relateds.length === 0) {
+            if (this.state.announcement.ownerId) {
+                base.fetch(`announcements`, {
+                    context: this,
+                    asArray: true,
+                    queries: {
+                        orderByChild: 'ownerId',
+                        equalTo: this.state.announcement.ownerId,
+                        limitToLast: 6
+                    },
+                    then(data) {
+                        this.setState({ relateds: data })
+                    }
+                });
+            }
         }
+    }
+
+    render() {
         return (
             <Fragment>
                 {this.state.announcement && this.state.announcement.id &&
@@ -65,12 +109,21 @@ class DetailsPage extends Component {
                         onSendingEmailm={this.onSendingEmailm}
                         announcement={this.state.announcement}
                         user={this.state.user}
-                        relateds={relateds}
-                        redirectToProfile ={this.redirectToProfile}
+                        relateds={this.state.relateds}
+                        redirectToProfile={this.redirectToProfile}
                         redirectToChat={this.redirectToChat}
-                    />}
+                    />
+                }
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    closeButton={false}
+                    newestOnTop={false}
+                    rtl={false}>
+                </ToastContainer>
             </Fragment>
         )
     }
 }
-export default DetailsPage
+const WrappedDetailsPage = withAuthentication(DetailsPage)
+export default WrappedDetailsPage
