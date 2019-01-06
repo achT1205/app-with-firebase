@@ -290,6 +290,16 @@ const Form = ({
                         </MDBCol>
                     </MDBRow>
                     <MDBRow>
+                        <MDBCol md="12">
+                            <MDBInput
+                                type="text"
+                                label={t('common.labels.address')}
+                                value={announcement.owner.address}
+                                onChange={handleOwnerInputChange}
+                                name="address" />
+                        </MDBCol>
+                    </MDBRow>
+                    <MDBRow>
                         <MDBCol md="6">
                             <Input
                                 label={t('common.labels.hidePhone')}

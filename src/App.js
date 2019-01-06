@@ -18,7 +18,7 @@ class App extends Component {
     super(props);
     this.state = {
       signInMode: 1,
-      passwordIndicator : '',
+      passwordIndicator: '',
       credential: {
         email: "",
         password: "",
@@ -44,59 +44,66 @@ class App extends Component {
     });
   }
 
-
   componentDidMount() {
-    base.syncState('/users', {
-      context: this,
-      state: 'users'
-    });
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        if (["facebook.com", "google.com"].includes(user.providerData[0].providerId)) {
-          this.handleAuth({ user })
-        } else {
-          let currentUser = {
-            id: user.uid,
-            email: user.email,
-            photoURL: 'http://placehold.it/50x50',
-            phone: "",
-            displayName: "",
-            emailVerified: false,
-            createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
-            lastUpdate: ""
+        base.fetch(`users/${user.uid}`, {
+          context: this,
+          then(data) {
+            if (data && data.id) {
+              this.setState(
+                {
+                  currentUser: data,
+                  isConnected: user.uid ? true : false,
+                  modal: false
+                })
+            } else {
+              if (["facebook.com", "google.com"].includes(user.providerData[0].providerId)) {
+                this.handleAuth({ user })
+              }
+              else {
+                let currentUser = {
+                  id: user.uid,
+                  email: user.email,
+                  photoURL: 'http://placehold.it/50x50',
+                  phone: "",
+                  displayName: "",
+                  emailVerified: false,
+                  createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
+                  lastUpdate: "",
+                  isConnected: true
+                }
+                this.setState({
+                  currentUser: currentUser,
+                  isConnected: user.uid ? true : false,
+                  modal: false
+                });
+              }
+            }
           }
-          this.setState({
-            currentUser: currentUser,
-            isConnected: user.uid ? true : false,
-            modal: false
-          });
-        }
+        });
       }
     });
   }
 
   handleAuth = async authData => {
-    let id = authData.user.uid;
-    let user = await this.state.users[id]
-    if (!user || !user.id) {
-      user = {
-        id: authData.user.uid,
-        photoURL: authData.user.photoURL ? authData.user.photoURL : 'http://placehold.it/50x50',
-        phone: authData.user.phoneNumber,
-        displayName: authData.user.displayName,
-        emailVerified: authData.user.emailVerified,
-        email: authData.user.email,
-        createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
-        lastUpdate: ""
-      };
-      await base.post(`/users/${authData.user.uid}`, {
-        data: user
-      })
 
-    }
-
+    let user = {
+      id: authData.user.uid,
+      photoURL: authData.user.photoURL ? authData.user.photoURL : 'http://placehold.it/50x50',
+      phone: authData.user.phoneNumber,
+      displayName: authData.user.displayName,
+      emailVerified: authData.user.emailVerified,
+      email: authData.user.email,
+      createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
+      lastUpdate: "",
+      isConnected: true
+    };
+    await base.post(`/users/${authData.user.uid}`, {
+      data: user
+    })
     this.setState({
-      currentUser: user || authData.user,
+      currentUser: user,
       isConnected: authData.user.uid ? true : false,
       modal: false,
       SignInModal: 1
@@ -106,7 +113,6 @@ class App extends Component {
   authenticate = (provider) => {
     let authProvider = null;
     if (["facebook", "google"].includes(provider)) {
-      debugger
       if (provider === 'facebook') {
         authProvider = new firebase.auth.FacebookAuthProvider()
       }
@@ -151,11 +157,16 @@ class App extends Component {
   }
 
   logout = async () => {
-    console.log('Logout')
-    await firebase.auth().signOut()
+    await firebase.auth().signOut();
+    let user = this.state.currentUser;
+    user.isConnected = false;
+    base.update(`/users/${user.id}`, {
+      data: user
+    })
     this.setState({
       currentUser: null,
-      signInMode: 1
+      signInMode: 1,
+      currentUser: user
     })
   }
 
@@ -177,12 +188,12 @@ class App extends Component {
           passwordIndicator = 'danger';
         }
       }
-      else{
+      else {
         passwordIndicator = '';
       }
     }
 
-    this.setState({ credential , passwordIndicator : passwordIndicator})
+    this.setState({ credential, passwordIndicator: passwordIndicator })
   }
 
   handleCredentialCheck = () => {
@@ -308,7 +319,7 @@ class App extends Component {
               reset={this.reset}
               switchMode={this.switchMode}
               signInMode={this.state.signInMode}
-              passwordIndicator ={this.state.passwordIndicator}
+              passwordIndicator={this.state.passwordIndicator}
             />
             <ToastContainer
               position="top-right"

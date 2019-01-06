@@ -26,7 +26,6 @@ class EditPage extends React.Component {
     user: null,
     users: {},
     images: [],
-    announcements: {},
     announcement: {
       id: null,
       mainPicture: "",
@@ -43,6 +42,7 @@ class EditPage extends React.Component {
       type: 0,
       amount: "",
       status: 1,
+      ownerId: "",
       criteria: {
         mark: null,
         model: null,
@@ -88,10 +88,6 @@ class EditPage extends React.Component {
   }
 
   componentDidMount() {
-    base.syncState('/announcements', {
-      context: this,
-      state: 'announcements'
-    });
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         base.fetch(`users/${user.uid}`, {
@@ -108,7 +104,7 @@ class EditPage extends React.Component {
 
   formateUser = async user => {
     let announcement = this.state.announcement;
-    announcement.owner.id = user.uid;
+    announcement.owner.id = user.id;
     announcement.owner.profileUrl = user.photoURL ? user.photoURL : "";
     announcement.owner.phone = user.phone ? user.phone : "";
     announcement.owner.name = user.displayName ? user.displayName : "";
@@ -117,10 +113,15 @@ class EditPage extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.announcements && this.props.match.params.id && !this.state.announcement.id) {
-      let announcement = this.state.announcements[this.props.match.params.id];
-      if (announcement && announcement.id)
-        this.setState({ announcement: announcement })
+    if (this.props.match.params.id && !this.state.announcement.id) {
+      base.fetch(`announcements/${this.props.match.params.id}`, {
+        context: this,
+        then(data) {
+          if (Object.keys(data).length !== 0 && data.constructor === Object) {
+            this.setState({ announcement: data });
+          }
+        }
+      });
     }
   }
 
@@ -149,7 +150,7 @@ class EditPage extends React.Component {
           return;
         }
         this.setState({ saving: true });
-        this.addAnnouncement(this.state.announcement);
+        this.addAnnouncement(user);
       }
       else {
         toast.error("You must connect to continue :(", {
@@ -162,17 +163,17 @@ class EditPage extends React.Component {
 
   }
 
-  addAnnouncement = announcement => {
-
+  addAnnouncement = (user) => {
+    let announcement = this.state.announcement;
     let id = this.props.match.params.id ? this.props.match.params.id : `announcement-${Date.now()}`;
     announcement.id = id;
+    announcement.ownerId = user.uid;
     if (this.props.match.params.id) {
       announcement.lastModifDate = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
     } else {
       announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
-      // announcement = this.uploadImages(announcement);
     }
-    this.uploadImages(id, announcement);
+    this.uploadImages(announcement);
   }
 
   handleInputChange = (event) => {
@@ -209,13 +210,13 @@ class EditPage extends React.Component {
     this.setState({ images: images })
   }
   handleRemovePicture = (image) => {
-    let { announcement, announcements } = this.state;
+    let { announcement } = this.state;
     for (let i = 0; i < announcement.images.length; i++) {
       if (announcement.images[i].id === image.id) {
         var desertRef = storage.ref('images/').child(`${image.id + image.name}`);
         desertRef.delete().then(() => {
           announcement.images[i] = null;
-          this.setState({ announcements })
+          this.setState({ announcement })
         }).catch((error) => {
           console.log(error)
         });
@@ -223,7 +224,7 @@ class EditPage extends React.Component {
     }
   }
 
-  uploadImageAsPromise = (image, id, announcements, announcement) => {
+  uploadImageAsPromise = (image, announcement) => {
     let fullName = image.id + image.file.name;
     let task = storage.ref(`images/${fullName}`).put(image.file);
     return task.then(() => {
@@ -235,17 +236,20 @@ class EditPage extends React.Component {
           thumb: downloadURL.replace(fullName, "thumb_" + fullName)
         }
         announcement.images.push(picture);
-        announcements[id] = announcement;
-        this.setState({ announcements: announcements });
+        base.update(`/announcements/${announcement.id}`, {
+          data: announcement
+        })
       })
     })
   }
 
-  uploadImages = (id, announcement) => {
-    const announcements = { ...this.state.announcements }
+  uploadImages = (announcement) => {
+    base.post(`/announcements/${announcement.id}`, {
+      data: announcement
+    })
     const { images } = this.state;
     if (images && images.length > 0) {
-      Promise.all(images.map(image => this.uploadImageAsPromise(image, id, announcements, announcement)))
+      Promise.all(images.map(image => this.uploadImageAsPromise(image, announcement)))
         .then(() => {
           this.setState({ saving: false, modal: true })
         })
@@ -254,43 +258,9 @@ class EditPage extends React.Component {
         });
     }
     else {
-      announcements[id] = announcement;
-      this.setState({ announcements: announcements, saving: false, modal: true });
+      this.setState({ saving: false, modal: true });
     }
   }
-
-  /*
-   uploadImages = (id, announcement) => {
-    const announcements = { ...this.state.announcements }
-    const { images } = this.state;
-    if (images && images.length > 0) {
-      debugger;
-      images.forEach((image) => {
-        let fullName = image.id + image.file.name;
-        storage.ref(`images/${fullName}`).put(image.file).then(() => {
-          storage.ref('images/').child(`${fullName}`).getDownloadURL().then((url) => {
-            let picture = {
-              id: image.id,
-              name: image.file.name,
-              url: url,
-              thumb: url.replace(fullName, "thumb_" + fullName)
-            }
-            announcement.images.push(picture);
-            debugger;
-            announcements[id] = announcement;
-            this.setState({ announcements: announcements, saving: false, modal: true });
-          })
-        }).catch((error) => {
-          console.log(error)
-        });
-      });
-    }
-    else {
-      announcements[id] = announcement;
-      this.setState({ announcements: announcements, saving: false, modal: true });
-    }
-  }
-  */
 
   handelCategorySelectChange = (value) => {
     let id = 0;

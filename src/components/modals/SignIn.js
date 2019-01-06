@@ -3,7 +3,7 @@ import { Modal, ModalBody, MDBContainer, MDBCardBody, MDBInput, MDBBtn, MDBIcon,
 
 class SignInModal extends Component {
   render() {
-    const { passwordIndicator, modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register, switchMode, signInMode, reset } = this.props;
+    const { modal, toggle, authenticate, credential, handleCredentialChange, handleCredentialCheck, register, switchMode, signInMode, reset } = this.props;
     return (
       <Modal isOpen={modal} toggle={toggle}>
         <ModalBody>
@@ -89,7 +89,7 @@ class SignInModal extends Component {
                           }
                           <span className="ml-2">one numeric character</span></li>
                         <li>
-                          {!  /[$@$!%*?&\.;]/.test(credential.password) &&
+                          {!/[$@$!%*?&\.;]/.test(credential.password) &&
                             <MDBIcon
                               icon="times-circle-o"
                               className="red-text ml-1"
@@ -155,7 +155,7 @@ class SignInModal extends Component {
               {signInMode === 2 &&
                 <p className="font-small grey-text d-flex justify-content-end">
                   Have an account?
-                <a onClick={() => switchMode(1)} className="blue-text ml-1">
+                <a href="#" onClick={() => switchMode(1)} className="blue-text ml-1">
                     Log in
                 </a>
                 </p>
@@ -201,18 +201,19 @@ class SignInModal extends Component {
                   className="mr-md-3 z-depth-1a"
                   onClick={() => authenticate("facebook")}
                 >
-                  <MDBIcon icon="facebook" className="blue-text text-center" />
+                  <MDBIcon icon="facebook"
+                   className="blue-text text-center" />
                 </MDBBtn>
                 <MDBBtn
                   type="button"
                   color="white"
                   rounded
                   className="z-depth-1a"
+                  onClick={() => authenticate("google")}
                 >
                   <MDBIcon
                     icon="google-plus"
                     className="blue-text"
-                    onClick={() => authenticate("google")}
                   />
                 </MDBBtn>
               </div>
@@ -221,7 +222,7 @@ class SignInModal extends Component {
               <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <p className="font-small grey-text d-flex justify-content-end">
                   Not a member?
-                <a onClick={() => switchMode(2)} className="blue-text ml-1">
+                <a href="#" onClick={() => switchMode(2)} className="blue-text ml-1">
                     Sign Up
                 </a>
                 </p>
@@ -230,7 +231,7 @@ class SignInModal extends Component {
             {signInMode === 3 &&
               <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <p className="font-small grey-text d-flex justify-content-end">
-                  <a onClick={() => switchMode(1)} className="blue-text ml-1">
+                  <a href="#" onClick={() => switchMode(1)} className="blue-text ml-1">
                     Sign in now !
                 </a>
                 </p>

@@ -133,13 +133,13 @@ class Header extends Component {
                                     <img src={logo} onClick={() => handleChange("us")} className="flag flag-us" alt="English" />
                                 </div>
                             </NavItem>
-                            {(!user || !user.id) &&
+                            {(!user || !user.isConnected) &&
                                 <NavItem>
                                     <MDBBtn rounded color="info" size="sm" onClick={signIn}>LOG IN <Fa icon="sign-in" /></MDBBtn>
                                 </NavItem>
                             }
 
-                            {user && user.id &&
+                            {user && user.isConnected &&
                                 <NavItem>
                                     <Dropdown>
                                         <DropdownToggle className="dopdown-toggle" nav>

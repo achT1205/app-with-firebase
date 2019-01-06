@@ -6,28 +6,41 @@ import base from '../../base'
 class DetailsPage extends Component {
     state = {
         announcement: {},
-        announcements: {}
+        users: [],
+        user: {}
     }
 
     componentDidMount() {
-        base.syncState('/announcements', {
+        base.syncState(`users/`, {
             context: this,
-            state: 'announcements'
+            state: 'users',
+            asArray: true
         });
-    }
-
-    componentDidUpdate() {
-        if (this.state.announcements && this.props.match.params.id && !this.state.announcement.id) {
-            let announcement = this.state.announcements[this.props.match.params.id];
-            if (announcement && announcement.id)
-                this.setState({ announcement: announcement })
+        if (this.props.match.params.id) {
+            base.syncState(`announcements/${this.props.match.params.id}`, {
+                context: this,
+                state: 'announcement'
+            });
         }
     }
 
+    onSendingEmailm = () => {
+
+    }
+
     render() {
+        let owners =[];
+        if(this.state.users.length > 0){
+            owners = this.state.users.filter(u=>u.id === this.state.announcement.ownerId)
+        }
         return (
             <Fragment>
-                {this.state.announcement.id && <DetailsDesktop announcement={this.state.announcement} />}
+                {this.state.announcement && this.state.announcement.id &&
+                    <DetailsDesktop
+                        onSendingEmailm={this.onSendingEmailm}
+                        announcement={this.state.announcement}
+                        user={owners[0]}
+                    />}
             </Fragment>
         )
     }

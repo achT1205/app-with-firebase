@@ -6,7 +6,7 @@ import DetailsAccordion from './DetailsAccordion';
 import DetailsContact from './DetailsContact';
 //import RelatedAnnouncements from './RelatedAnnouncements';
 const DetailsDesktop = props => {
-    const { announcement, onSendingEmailm } = props;
+    const { announcement, onSendingEmailm, user } = props;
     return (
         <section className="my-5">
             <MDBContainer>
@@ -24,7 +24,7 @@ const DetailsDesktop = props => {
                                     </MDBCol>
                                     <MDBCol sm="1"></MDBCol>
                                     <MDBCol sm="4">
-                                        <DetailsContact owner={announcement.owner} />
+                                        <DetailsContact owner={announcement.owner} user={user}/>
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>

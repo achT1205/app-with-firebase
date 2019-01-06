@@ -20,11 +20,11 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
             </div>
         )
     };
-    const formateActions = id => {
+    const formateActions = (id, index) => {
         return (
             <div className="form-inline">
                 <MDBIcon onClick={() => handleEdit(id)} icon="edit" size="lg" className="cyan-text" />
-                <MDBIcon onClick={() => handleDelete(id)} icon="times-circle-o" className="red-text ml-1" size="lg" />
+                <MDBIcon onClick={() => handleDelete(id, index)} icon="times-circle-o" className="red-text ml-1" size="lg" />
             </div>
         )
 
@@ -72,17 +72,14 @@ const Datatable = ({ announcements, handleEdit, handleDelete }) => {
             ],
             rows: []
         };
-
-
-        Object.keys(announcements)
-            .map(key => {
+        announcements.map((announcement, index) => {
                 let row = {
-                    cover: formateCover(announcements[key].images[0].thumb),
-                    title: announcements[key].title,
-                    amount: announcements[key].amount,
-                    description: announcements[key].description,
-                    date: announcements[key].createAt,
-                    actions: formateActions(key)
+                    cover: formateCover(announcement.images[0].thumb),
+                    title: announcement.title,
+                    amount: announcement.amount,
+                    description: announcement.description,
+                    date: announcement.createAt,
+                    actions: formateActions(announcement.id , index)
                 }
                 data.rows.push(row)
             })
