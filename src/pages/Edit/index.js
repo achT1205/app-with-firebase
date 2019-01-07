@@ -165,7 +165,7 @@ class EditPage extends React.Component {
 
   addAnnouncement = (user) => {
     let announcement = this.state.announcement;
-    let id = this.props.match.params.id ? this.props.match.params.id : `announcement-${Date.now()}`;
+    let id = this.props.match.params.id ? this.props.match.params.id : Date.now();
     announcement.id = id;
     announcement.ownerId = user.uid;
     if (this.props.match.params.id) {

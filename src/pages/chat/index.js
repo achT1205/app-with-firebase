@@ -4,14 +4,13 @@ import { Container } from 'mdbreact'
 import withAuthentication from '../../hoc/withAuthentication'
 
 class ChatPage extends Component {
-  state = {
-
-  }
-
+ 
   render() {
     return (
       <Container>
-        <Chat user={this.props.user} />
+        { this.props.user && this.props.user.id &&
+          <Chat user={this.props.user} {...this.props} />
+        }
       </Container>
     )
   }

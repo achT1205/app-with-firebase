@@ -54,11 +54,23 @@ class DetailsPage extends Component {
                             recipientName: this.state.user.displayName,
                             senderAvatar: this.props.user.photoURL,
                             recipientAvatar: this.state.user.photoURL,
-                            message: "Hello, Are you there?",
                             createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
                             toRespond: 1,
                             seen: false,
-                            active: false
+                            active: false,
+                            messages :[
+                                 {
+                                    id: Date.now(),
+                                    conversationId: this.state.announcement.id,
+                                    senderId: this.props.user.id,
+                                    recipientId: this.state.user.id,
+                                    author: this.props.user.displayName,
+                                    avatar: this.props.user.photoURL,
+                                    createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+                                    message: "Hello, Are you there?",
+
+                                  }
+                            ]
                         }
                         base.post(`/conversations/${this.state.announcement.id}`, {
                             data: newConversation,

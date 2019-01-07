@@ -15,132 +15,17 @@ import {
 import './chat.css';
 import withAuthentication from '../hoc/withAuthentication'
 import base from '../base'
+import { DateTime } from "luxon";
 
 class Chat extends Component {
   constructor() {
     super();
     this.state = {
       conversations: [],
-      friends: [
-        {
-          name: "John Doe",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          message: "Hello, Are you there?",
-          when: "Just now",
-          toRespond: 1,
-          seen: false,
-          active: true
-        },
-        {
-          name: "Danny Smith",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "5 min ago",
-          toRespond: 0,
-          seen: false,
-          active: false
-        },
-        {
-          name: "Alex Steward",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "Yesterday",
-          toRespond: 0,
-          seen: false,
-          active: false
-        },
-        {
-          name: "Ashley Olsen",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "Yesterday",
-          toRespond: 0,
-          seen: false,
-          active: false
-        },
-        {
-          name: "Kate Moss",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "Yesterday",
-          toRespond: 0,
-          seen: true,
-          active: false
-        },
-        {
-          name: "Lara Croft",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "Yesterday",
-          toRespond: 0,
-          seen: false,
-          active: false
-        },
-        {
-          name: "Brad Pitt",
-          message: "Lorem ipsum dolor sit",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "5 min ago",
-          toRespond: 0,
-          seen: true,
-          active: false
-        },
-        {
-          name: "Ken Ditto",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(3).jpg",
-          message: "Hello, Are you there?",
-          when: "Yesterday",
-          toRespond: 0,
-          seen: false,
-          active: false
-        },
-        {
-          name: "Marta Wozniak",
-          message: "Lorem ipsum dolor sit.",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "5 min ago",
-          toRespond: 0,
-          seen: false,
-          active: false
-        }
-      ],
-      messages: [
-        {
-          author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "12 mins ago",
-          message:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-        {
-          author: "Lara Croft",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "13 mins ago",
-          message:
-            " Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
-        },
-        {
-          author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "14 mins ago",
-          message:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-        {
-          author: "Lara Croft",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "16 mins ago",
-          message:
-            " Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
-        },
-        {
-          author: "Brad Pitt",
-          avatar: "https://mdbootstrap.com/img/Photos/Avatars/img(2).jpg",
-          when: "17 mins ago",
-          message:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        }
-      ]
+      newMessage: "",
+      selectedConversation: null,
+      messages: [],
+      currentMessages: []
     };
   }
 
@@ -159,11 +44,50 @@ class Chat extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.conversations.length > 0) {
-      let selectedCoversation = this.state.conversations.find(c => c.id === this.props.match.params.id);
-      debugger
+    if (this.state.conversations.length > 0 && (!this.state.selectedConversation)) {
+      this.selectConversation(this.props.match.params.id);
     }
   }
+
+  selectConversation = (id) => {
+    this.state.conversations.forEach((c) => {
+      if (c.id === id) {
+        c.active = true;
+        this.setState({ selectedConversation: c });
+      }
+      else {
+        c.active = false;
+      }
+    })
+  }
+
+  handleInputChange = (event) => {
+    this.setState({ newMessage: event.target.value })
+  }
+
+  handleOnSubmitForm = (event) => {
+    event.persist();
+    if (this.state.messages) {
+      let message = {
+        id: Date.now(),
+        conversationId: this.state.selectedConversation.id,
+        senderId: this.state.selectedConversation.senderId,
+        recipientId: this.state.selectedConversation.recipientId,
+        author: this.state.selectedConversation.senderName,
+        avatar: this.state.selectedConversation.senderAvatar,
+        createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+        message: this.state.newMessage
+      }
+      let {conversations, selectedConversation } = this.state;
+      conversations.forEach((c)=>{
+        if(c.id === selectedConversation.id){
+          c.messages.push(message) ;
+        }
+      })
+      this.setState({ conversations , newMessage: "" })
+    }
+  }
+
 
   render() {
     return (
@@ -171,12 +95,12 @@ class Chat extends Component {
         <MDBCardBody>
           <MDBRow className="px-lg-2 px-2">
             <MDBCol md="6" xl="4" className="px-0 mb-4 mb-md-0 scrollable-friends-list">
-              <h6 className="font-weight-bold mb-3 text-lg-left">Member</h6>
+              <h6 className="font-weight-bold mb-3 text-lg-left">Chat</h6>
               <MDBScrollbar>
                 <div className="white z-depth-1 p-3">
                   <MDBListGroup className="friend-list">
-                    {this.state.friends.map(friend => (
-                      <Friend key={friend.name} friend={friend} />
+                    {this.state.conversations.map(conversation => (
+                      <Conversation key={conversation.id} conversation={conversation} selectConversation={this.selectConversation} />
                     ))}
                   </MDBListGroup>
                 </div>
@@ -186,9 +110,10 @@ class Chat extends Component {
               <div className="scrollable-chat">
                 <MDBScrollbar>
                   <MDBListGroup className="list-unstyled pl-3 pr-3">
-                    {this.state.messages.map(message => (
+                    {this.state.selectedConversation && this.state.selectedConversation.messages && this.state.selectedConversation.messages.length >0 &&
+                      this.state.selectedConversation.messages.map(message => (
                       <ChatMessage
-                        key={message.author + message.when}
+                        key={message.id}
                         message={message}
                       />
                     ))}
@@ -196,20 +121,26 @@ class Chat extends Component {
                 </MDBScrollbar>
               </div>
               <div className="form-group basic-textarea">
-                <textarea
-                  className="form-control pl-2 my-0"
-                  id="exampleFormControlTextarea2"
-                  rows="3"
-                  placeholder="Type your message here..."
-                />
-                <MDBBtn
-                  color="info"
-                  rounded
-                  size="sm"
-                  className="float-right mt-4"
-                >
-                  Send
+                <form>
+                  <textarea
+                    className="form-control pl-2 my-0"
+                    id="exampleFormControlTextarea2"
+                    rows="3"
+                    name="newMessage"
+                    placeholder="Type your message here..."
+                    value={this.state.newMessage}
+                    onChange={this.handleInputChange}
+                  />
+                  <MDBBtn
+                    color="info"
+                    rounded
+                    size="sm"
+                    className="float-right mt-4"
+                    onClick={this.handleOnSubmitForm}
+                  >
+                    Send
                 </MDBBtn>
+                </form>
               </div>
             </MDBCol>
           </MDBRow>
@@ -219,28 +150,29 @@ class Chat extends Component {
   }
 }
 
-const Friend = ({
-  friend: { name, avatar, message, when, toRespond, seen, active }
+const Conversation = ({
+  conversation: { id, recipientName, recipientAvatar, message, createAt, toRespond, seen, active }, selectConversation
 }) => (
     <MDBListGroupItem
       href="#!"
       className="d-flex justify-content-between p-2 border-light"
       style={{ backgroundColor: active ? "#eeeeee" : "" }}
+      onClick={() => selectConversation(id)}
     >
       <MDBAvatar
         tag="img"
-        src={avatar}
+        src={recipientAvatar}
         alt="avatar"
         circle
         className="mr-2 z-depth-1"
       />
       <div style={{ fontSize: "0.95rem" }}>
-        <strong>{name}</strong>
+        <strong>{recipientName}</strong>
         <p className="text-muted">{message}</p>
       </div>
       <div>
         <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
-          {when}
+          {createAt}
         </p>
         {seen ? (
           <span className="text-muted float-right">
@@ -259,7 +191,7 @@ const Friend = ({
     </MDBListGroupItem>
   );
 
-const ChatMessage = ({ message: { author, avatar, when, message } }) => (
+const ChatMessage = ({ message: { author, avatar, createAt, message } }) => (
   <li className="chat-message d-flex justify-content-between mb-4">
     <MDBAvatar
       tag="img"
@@ -273,7 +205,7 @@ const ChatMessage = ({ message: { author, avatar, when, message } }) => (
         <div>
           <strong className="primary-font">{author}</strong>
           <small className="pull-right text-muted">
-            <i className="fa fa-clock-o" /> {when}
+            <i className="fa fa-clock-o" /> {createAt}
           </small>
         </div>
         <hr />
