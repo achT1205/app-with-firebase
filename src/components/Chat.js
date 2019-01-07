@@ -145,10 +145,11 @@ class Chat extends Component {
                 <MDBScrollbar>
                   <MDBListGroup className="list-unstyled pl-3 pr-3" >
                     {this.state.selectedConversation && this.state.selectedConversation.messages && this.state.selectedConversation.messages.length > 0 &&
-                      this.state.selectedConversation.messages.map(message => (
+                      this.state.selectedConversation.messages.map((message, index) => (
                         <ChatMessage
                           key={message.id}
                           message={message}
+                          isLast={index === this.state.selectedConversation.messages.length -1 ? true :false}
                         />
                       ))}
                   </MDBListGroup>
@@ -185,7 +186,7 @@ class Chat extends Component {
 }
 
 const Conversation = ({
-  conversation: { id, recipientName, recipientAvatar, message, createAt, toRespond, seen, active }, selectConversation
+  conversation: { id, senderName, senderAvatar, messages, createAt, toRespond, seen, active }, selectConversation
 }) => (
     <MDBListGroupItem
       href="#!"
@@ -195,14 +196,14 @@ const Conversation = ({
     >
       <MDBAvatar
         tag="img"
-        src={recipientAvatar}
+        src={senderAvatar}
         alt="avatar"
         circle
         className="mr-2 z-depth-1"
       />
       <div style={{ fontSize: "0.95rem" }}>
-        <strong>{recipientName}</strong>
-        <p className="text-muted">{message}</p>
+        <strong>{senderName}</strong>
+        <p className="text-muted">{messages[messages.length -1].message.substring(0,10) + "..."}</p>
       </div>
       <div>
         <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
@@ -225,7 +226,7 @@ const Conversation = ({
     </MDBListGroupItem>
   );
 
-const ChatMessage = ({ message: { author, avatar, createAt, message } }) => (
+const ChatMessage = ({ message: {id, author, avatar, createAt, message }, isLast }) => (
   <li className="chat-message d-flex justify-content-between mb-4">
     <MDBAvatar
       tag="img"
