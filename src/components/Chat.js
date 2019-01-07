@@ -54,12 +54,13 @@ class Chat extends Component {
     this.state.conversations.forEach((c) => {
       if (c.id === id) {
         c.active = true;
+        /*
         if (c.toRespond > 0) {
         c.toRespond = 0;
           base.update(`/conversations/${id}`, {
             data: c
           })
-        };
+        };*/
         this.setState({ selectedConversation: c });
       }
       else {
