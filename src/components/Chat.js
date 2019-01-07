@@ -134,7 +134,11 @@ class Chat extends Component {
                 <div className="white z-depth-1 p-3">
                   <MDBListGroup className="friend-list">
                     {this.state.conversations.map(conversation => (
-                      <Conversation key={conversation.id} conversation={conversation} selectConversation={this.selectConversation} />
+                      <Conversation
+                        key={conversation.id}
+                        conversation={conversation}
+                        selectConversation={this.selectConversation}
+                        user={this.props.user} />
                     ))}
                   </MDBListGroup>
                 </div>
@@ -149,7 +153,8 @@ class Chat extends Component {
                         <ChatMessage
                           key={message.id}
                           message={message}
-                          isLast={index === this.state.selectedConversation.messages.length -1 ? true :false}
+                          isLast={index === this.state.selectedConversation.messages.length - 1 ? true : false}
+                          user={this.props.user}
                         />
                       ))}
                   </MDBListGroup>
@@ -186,7 +191,7 @@ class Chat extends Component {
 }
 
 const Conversation = ({
-  conversation: { id, senderName, senderAvatar, messages, createAt, toRespond, seen, active }, selectConversation
+  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, selectConversation, user
 }) => (
     <MDBListGroupItem
       href="#!"
@@ -196,14 +201,14 @@ const Conversation = ({
     >
       <MDBAvatar
         tag="img"
-        src={senderAvatar}
+        src={user.id === recipientId ? senderAvatar : recipientAvatar}
         alt="avatar"
         circle
         className="mr-2 z-depth-1"
       />
       <div style={{ fontSize: "0.95rem" }}>
-        <strong>{senderName}</strong>
-        <p className="text-muted">{messages[messages.length -1].message.substring(0,10) + "..."}</p>
+        <strong>{user.id === recipientId ? senderName : recipientName}</strong>
+        <p className="text-muted">{messages[messages.length - 1].message.substring(0, 10) + "..."}</p>
       </div>
       <div>
         <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
@@ -226,7 +231,7 @@ const Conversation = ({
     </MDBListGroupItem>
   );
 
-const ChatMessage = ({ message: {id, author, avatar, createAt, message }, isLast }) => (
+const ChatMessage = ({ message: { id, author, avatar, createAt, message }, isLast, user }) => (
   <li className="chat-message d-flex justify-content-between mb-4">
     <MDBAvatar
       tag="img"

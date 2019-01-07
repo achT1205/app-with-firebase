@@ -124,6 +124,7 @@ class DetailsPage extends Component {
                         relateds={this.state.relateds}
                         redirectToProfile={this.redirectToProfile}
                         redirectToChat={this.redirectToChat}
+                        currentUser={this.props.user}
                     />
                 }
                 <ToastContainer

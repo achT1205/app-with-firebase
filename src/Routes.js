@@ -24,7 +24,7 @@ class Routes extends React.Component {
         <Route path="/details/:id" component={DetailsPage} />
         <Route path="/manage" component={ManagePage} />
         <Route path="/profile/:id" component={AccountPage} />
-        <Route path="/chat" component={ChatPage} />
+        <Route path="/chats" component={ChatPage} />
         <Route path="/chats/:id" component={ChatPage} />
         <Route path="/notifications" component={NotificationPage} />
         <Route

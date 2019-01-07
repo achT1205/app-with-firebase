@@ -110,7 +110,7 @@ class Header extends Component {
                                         </span>
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-default">
-                                        <DropdownItem href="/chat">Notif #1</DropdownItem>
+                                        <DropdownItem href="/chats">chats</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                             </NavItem>

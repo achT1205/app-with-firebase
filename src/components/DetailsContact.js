@@ -2,17 +2,20 @@ import React from "react";
 import { MDBRow, MDBCard, MDBCardBody, MDBIcon, MDBCol, Badge } from "mdbreact";
 
 const DetailsContact = (props) => {
-  const { owner, user, redirectToProfile, redirectToChat } = props;
+  const { owner, user, redirectToProfile, redirectToChat, currentUser } = props;
   return (
     <MDBRow>
       <MDBCol>
         <MDBCard news>
           <MDBCardBody>
             <div className="content">
-              <div className="right-side-meta">
-                {user.isConnected === true && <Badge color="green" pill>Online</Badge>}
-                {user.isConnected === false && <Badge color="pink" pill>Off</Badge>}
-              </div>
+              {
+                 currentUser && user.id !== currentUser.id &&
+                <div className="right-side-meta">
+                  {user.isConnected === true && <Badge color="green" pill>Online</Badge>}
+                  {user.isConnected === false && <Badge color="pink" pill>Off</Badge>}
+                </div>
+              }
               <img
                 src={user.photoURL}
                 alt=""
@@ -68,7 +71,7 @@ const DetailsContact = (props) => {
                 </a>
               </li>
               {
-                user.isConnected &&
+                currentUser && user.isConnected && user.id !== currentUser.id &&
                 <li className="list-inline-item" onClick={redirectToChat}>
                   <a href="#!" className="p-2 fa-lg w-ic">
                     <MDBIcon icon="comments-o" />
