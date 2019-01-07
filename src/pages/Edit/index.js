@@ -6,8 +6,7 @@ import categoryArray from './categories';
 import { DateTime } from "luxon";
 
 // Firebase
-import base from '../../base';
-import { storage } from '../../base'
+import base, { storage }  from '../../base';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 

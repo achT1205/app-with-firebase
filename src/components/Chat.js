@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import {
   MDBCard,
   MDBCardBody,
@@ -18,28 +18,25 @@ import base from '../base'
 import { DateTime } from "luxon";
 
 class Chat extends Component {
-  constructor() {
-    super();
-    this.state = {
-      conversations: [],
-      newMessage: "",
-      selectedConversation: null,
-      messages: [],
-      currentMessages: []
-    };
+  state = {
+    conversations: [],
+    newMessage: "",
+    selectedConversation: null,
+    messages: [],
+    currentMessages: []
   }
+  messagesRef = createRef()
 
   componentDidMount() {
     if (this.props.user && this.props.user.id) {
-      base.syncState(`conversations/`, {
+      base.listenTo('conversations', {
         context: this,
         asArray: true,
-        queries: {
-          orderByChild: 'senderId',
-          equalTo: this.props.user.id,
-        },
-        state: 'conversations'
-      });
+        then(conversations) {
+          this.fetchConversations(conversations);
+        }
+      })
+
     }
   }
 
@@ -47,18 +44,54 @@ class Chat extends Component {
     if (this.state.conversations.length > 0 && (!this.state.selectedConversation)) {
       this.selectConversation(this.props.match.params.id);
     }
+    const ref = this.messagesRef.current
+    if (ref) {
+      ref.scrollTop = ref.scrollHeight
+    }
   }
 
   selectConversation = (id) => {
     this.state.conversations.forEach((c) => {
       if (c.id === id) {
         c.active = true;
+        if (c.toRespond > 0) {
+        c.toRespond = 0;
+          base.update(`/conversations/${id}`, {
+            data: c
+          })
+        };
         this.setState({ selectedConversation: c });
       }
       else {
         c.active = false;
       }
     })
+  }
+
+  fetchConversations = (conversations) => {
+    const { selectedConversation } = this.state;
+    if (conversations && conversations.length > 0) {
+      let cvs = [];
+      conversations.forEach((c) => {
+        if (c => c.senderId === this.props.user.id || c.recipientId === this.props.user.id) {
+          if (selectedConversation && selectedConversation.id && c.id === selectedConversation.id) {
+            c.active = true;
+          } else {
+            c.active = false;
+          }
+          cvs.push(c);
+        }
+      })
+      this.setState({ conversations: cvs });
+      if (selectedConversation && selectedConversation.id) {
+        let updateds = conversations.filter(c => c.id === selectedConversation.id);
+        debugger;
+        if (selectedConversation !== updateds[0]) {
+          debugger
+          this.setState({ selectedConversation: updateds[0] });
+        }
+      }
+    }
   }
 
   handleInputChange = (event) => {
@@ -78,13 +111,13 @@ class Chat extends Component {
         createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
         message: this.state.newMessage
       }
-      let {conversations, selectedConversation } = this.state;
-      conversations.forEach((c)=>{
-        if(c.id === selectedConversation.id){
-          c.messages.push(message) ;
-        }
+      let { selectedConversation } = this.state;
+      selectedConversation.toRespond++;
+      selectedConversation.messages.push(message);
+      base.update(`/conversations/${this.state.selectedConversation.id}`, {
+        data: selectedConversation
       })
-      this.setState({ conversations , newMessage: "" })
+      this.setState({ newMessage: "" })
     }
   }
 
@@ -107,16 +140,16 @@ class Chat extends Component {
               </MDBScrollbar>
             </MDBCol>
             <MDBCol md="6" xl="8" className="pl-md-3 mt-4 mt-md-0 px-lg-auto">
-              <div className="scrollable-chat">
+              <div className="scrollable-chat" ref={this.messagesRef}>
                 <MDBScrollbar>
-                  <MDBListGroup className="list-unstyled pl-3 pr-3">
-                    {this.state.selectedConversation && this.state.selectedConversation.messages && this.state.selectedConversation.messages.length >0 &&
+                  <MDBListGroup className="list-unstyled pl-3 pr-3" >
+                    {this.state.selectedConversation && this.state.selectedConversation.messages && this.state.selectedConversation.messages.length > 0 &&
                       this.state.selectedConversation.messages.map(message => (
-                      <ChatMessage
-                        key={message.id}
-                        message={message}
-                      />
-                    ))}
+                        <ChatMessage
+                          key={message.id}
+                          message={message}
+                        />
+                      ))}
                   </MDBListGroup>
                 </MDBScrollbar>
               </div>

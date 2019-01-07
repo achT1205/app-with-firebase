@@ -18,4 +18,4 @@ const storage = firebase.storage()
 
 export { firebaseApp }
 
-export { storage, base as default } 
+export { storage,firebase,  base as default } 
