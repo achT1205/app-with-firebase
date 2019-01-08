@@ -55,20 +55,19 @@ class DetailsPage extends Component {
                             senderAvatar: this.props.user.photoURL,
                             recipientAvatar: this.state.user.photoURL,
                             createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
-                            toRespond: 1,
-                            seen: false,
+                            toRespond: 0,
+                            seen: true,
                             active: false,
                             messages :[
                                  {
-                                    id: Date.now(),
+                                    id: 0,
                                     conversationId: this.state.announcement.id,
                                     senderId: this.props.user.id,
                                     recipientId: this.state.user.id,
                                     author: this.props.user.displayName,
                                     avatar: this.props.user.photoURL,
                                     createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
-                                    message: "Hello, Are you there?",
-
+                                    message: "init conversation",
                                   }
                             ]
                         }
