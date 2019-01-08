@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { toast, ToastContainer } from "mdbreact";
 // Firebase
 import base from '../../base'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 import createHistory from 'history/createBrowserHistory';
 const history = createHistory({ forceRefresh: true });
@@ -39,54 +40,57 @@ class DetailsPage extends Component {
     }
 
     redirectToChat = () => {
-        if (this.props.user && this.props.user.isConnected) {
-            base.fetch(`conversations/${this.state.announcement.id}`, {
-                context: this,
-                then(conversation) {
-                    if (conversation && conversation.id) {
-                        history.push(`/chats/${conversation.id}`);
-                    } else {
-                        let newConversation = {
-                            id: this.state.announcement.id,
-                            senderId: this.props.user.id,
-                            recipientId: this.state.user.id,
-                            senderName: this.props.user.displayName,
-                            recipientName: this.state.user.displayName,
-                            senderAvatar: this.props.user.photoURL,
-                            recipientAvatar: this.state.user.photoURL,
-                            createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
-                            toRespond: 0,
-                            seen: true,
-                            active: false,
-                            messages :[
-                                 {
-                                    id: 0,
-                                    conversationId: this.state.announcement.id,
-                                    senderId: this.props.user.id,
-                                    recipientId: this.state.user.id,
-                                    author: this.props.user.displayName,
-                                    avatar: this.props.user.photoURL,
-                                    createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
-                                    message: "init conversation",
-                                  }
-                            ]
-                        }
-                        base.post(`/conversations/${this.state.announcement.id}`, {
-                            data: newConversation,
-                        });
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                base.fetch(`conversations/${this.props.user.id + '-' + this.state.announcement.id}`, {
+                    context: this,
+                    then(conversation) {
+                        if (conversation && conversation.id) {
+                            history.push(`/chats/${this.props.user.id + '-' + this.state.announcement.id}`);
+                        } else {
+                            debugger
+                            let newConversation = {
+                                id: this.props.user.id + '-' + this.state.announcement.id,
+                                senderId: this.props.user.id,
+                                recipientId: this.state.user.id,
+                                senderName: this.props.user.displayName?  this.props.user.displayName : this.props.user.email,
+                                recipientName: this.state.user.displayName,
+                                senderAvatar: this.props.user.photoURL,
+                                recipientAvatar: this.state.user.photoURL,
+                                createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+                                toRespond: 0,
+                                seen: true,
+                                active: false,
+                                messages: [
+                                    {
+                                        id: 0,
+                                        conversationId: this.props.user.id + '-' + this.state.announcement.id,
+                                        senderId: this.props.user.id,
+                                        recipientId: this.state.user.id,
+                                        author: this.props.user.displayName,
+                                        avatar: this.props.user.photoURL,
+                                        createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+                                        message: "init conversation",
+                                    }
+                                ]
+                            }
+                            base.post(`/conversations/${this.props.user.id + '-' + this.state.announcement.id}`, {
+                                data: newConversation,
+                            });
 
-                        history.push(`/chats/${this.state.announcement.id}`)
+                            history.push(`/chats/${this.props.user.id + '-' + this.state.announcement.id}`)
+                        }
                     }
-                }
-            });
-        }
-        else {
-            toast.error("You must sign in to continue :(", {
-                position: "top-right",
-                autoClose: 5000,
-                closeButton: true,
-            });
-        }
+                });
+            }
+            else {
+                toast.error("You must sign in to continue :(", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    closeButton: true,
+                });
+            }
+        })
     }
 
     onSendingEmailm = () => {

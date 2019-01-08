@@ -5,15 +5,13 @@ import {
   MDBRow,
   MDBCol,
   MDBListGroup,
-  MDBListGroupItem,
-  MDBAvatar,
-  MDBBadge,
-  MDBIcon,
   MDBBtn,
   MDBScrollbar
 } from "mdbreact";
 import './chat.css';
 import withAuthentication from '../hoc/withAuthentication'
+import Conversation from './Conversation'
+import ChatMessage from './ChatMessage'
 import base from '../base'
 import { DateTime } from "luxon";
 
@@ -28,22 +26,16 @@ class Chat extends Component {
   messagesRef = createRef()
 
   componentDidMount() {
-    if (this.props.user && this.props.user.id) {
-      base.listenTo('conversations', {
-        context: this,
-        asArray: true,
-        then(conversations) {
-          this.fetchConversations(conversations);
-        }
-      })
-
-    }
+    base.listenTo('conversations', {
+      context: this,
+      asArray: true,
+      then(conversations) {
+        this.fetchConversations(conversations);
+      }
+    })
   }
 
   componentDidUpdate() {
-    if (this.state.conversations.length > 0 && !this.state.selectedConversation && this.props.match.params.id) {
-      this.selectConversation(this.props.match.params.id);
-    }
     const ref = this.messagesRef.current
     if (ref) {
       ref.scrollTop = ref.scrollHeight
@@ -71,12 +63,15 @@ class Chat extends Component {
 
   fetchConversations = (conversations) => {
     const { selectedConversation } = this.state;
-    if (conversations && conversations.length > 0) {
+    if (conversations && conversations.length > 0 && this.props.user && this.props.user.id) {
       let cvs = [];
       conversations.forEach((c) => {
-        if (c => c.senderId === this.props.user.id || c.recipientId === this.props.user.id) {
-          if (selectedConversation && selectedConversation.id && c.id === selectedConversation.id) {
+        let currentUserId = this.props.user.id;
+        if (c.senderId === currentUserId || c.recipientId === currentUserId) {
+          let selectedId = selectedConversation && selectedConversation.id ? selectedConversation.id : this.props.match.params.id;
+          if (c.id === selectedId) {
             c.active = true;
+            this.setState({ selectedConversation: c });
           } else {
             c.active = false;
           }
@@ -86,9 +81,7 @@ class Chat extends Component {
       this.setState({ conversations: cvs });
       if (selectedConversation && selectedConversation.id) {
         let updateds = conversations.filter(c => c.id === selectedConversation.id);
-        debugger;
         if (selectedConversation !== updateds[0]) {
-          debugger
           this.setState({ selectedConversation: updateds[0] });
         }
       }
@@ -205,7 +198,7 @@ class Chat extends Component {
             </MDBCardBody>
           </MDBCard>
         }
-        {(!this.state.conversations || this.state.conversations.length === 0) &&
+        {(this.state.conversations && this.state.conversations.length === 0) &&
           <div className="mt-5">
             <h4>Your didn't initiate any chat yet !</h4>
           </div>
@@ -214,97 +207,5 @@ class Chat extends Component {
     );
   }
 }
-
-const Conversation = ({
-  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, selectConversation, user
-}) => (
-    <Fragment>
-      {(user.id === recipientId && messages.length > 1 || user.id !== recipientId) &&
-        <MDBListGroupItem
-          href="#!"
-          className="d-flex justify-content-between p-2 border-light"
-          style={{ backgroundColor: active ? "#eeeeee" : "" }}
-          onClick={() => selectConversation(id)}
-        >
-          <MDBAvatar
-            tag="img"
-            src={user.id === recipientId ? senderAvatar : recipientAvatar}
-            alt="avatar"
-            circle
-            className="mr-2 z-depth-1"
-          />
-          <div style={{ fontSize: "0.95rem" }}>
-            <strong>{user.id === recipientId ? senderName : recipientName}</strong>
-            {messages.length > 1 &&
-              <p className="text-muted">{messages[messages.length - 1].message.substring(0, 10) + "..."}</p>
-            }
-          </div>
-          <div>
-            <p className="text-muted mb-0" style={{ fontSize: "0.75rem" }}>
-              {createAt}
-            </p>
-            {messages.length > 1 &&
-              <Fragment>
-                {messages[messages.length - 1].senderId === user.id &&
-                  <span className="text-muted float-right">
-                    <MDBIcon className="fa-mail-reply" aria-hidden="true" />
-                  </span>
-                }
-                {messages[messages.length - 1].recipientId === user.id &&
-                  <Fragment>
-                    {seen &&
-                      <span className="text-muted float-right">
-                        <MDBIcon className="fa-check" aria-hidden="true" />
-                      </span>
-                    }
-                    {!seen && toRespond > 0 &&
-                      <MDBBadge color="danger" className="float-right">
-                        {toRespond}
-                      </MDBBadge>
-                    }
-                    {!seen && toRespond == 0 &&
-                      <span className="text-muted float-right">
-                        <MDBIcon className="fa-mail-reply" aria-hidden="true" />
-                      </span>
-                    }
-                  </Fragment>
-                }
-              </Fragment>
-            }
-          </div>
-        </MDBListGroupItem>
-
-      }
-    </Fragment>
-  );
-
-const ChatMessage = ({ message: { id, author, avatar, createAt, message }, isLast, user }) => (
-  <Fragment>
-    {id !== 0 &&
-      <li className="chat-message d-flex justify-content-between mb-4">
-        <MDBAvatar
-          tag="img"
-          src={avatar}
-          alt="avatar"
-          circle
-          className="mx-2 z-depth-1"
-        />
-        <MDBCard>
-          <MDBCardBody>
-            <div>
-              <strong className="primary-font">{author}</strong>
-              <small className="pull-right text-muted">
-                <i className="fa fa-clock-o" /> {createAt}
-              </small>
-            </div>
-            <hr />
-            <p className="mb-0">{message}</p>
-          </MDBCardBody>
-        </MDBCard>
-      </li>
-    }
-  </Fragment>
-);
-
 const WrappedChat = withAuthentication(Chat)
 export default WrappedChat;

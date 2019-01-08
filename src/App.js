@@ -138,12 +138,17 @@ class App extends Component {
                 displayName: "",
                 emailVerified: user.emailVerified,
                 createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
-                lastUpdate: ""
+                lastUpdate: "",
+                isConnected: true
               }
+              base.post(`/users/${currentUser.id}`, {
+                data: currentUser
+              })
               this.setState({
                 currentUser: currentUser,
                 isConnected: user.uid ? true : false,
-                modal: false
+                modal: false, 
+                SignInModal: 1
               });
             }
           });
@@ -305,7 +310,7 @@ class App extends Component {
             handleChange={this.handleChange}
             signIn={this.toggle}
             logout={this.logout}
-            user={this.state.currentUser}
+            currentUser={this.state.currentUser}
           />
           <main style={{ marginTop: "4rem" }}>
             <SignInModal
