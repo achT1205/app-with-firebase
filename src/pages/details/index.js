@@ -15,7 +15,13 @@ class DetailsPage extends Component {
         announcement: {},
         user: {},
         relateds: [],
-        chats: []
+        chats: [],
+        formValues: {
+            name: "",
+            email: "",
+            subject: "",
+            message: ""
+        }
     }
 
     componentDidMount() {
@@ -53,7 +59,7 @@ class DetailsPage extends Component {
                                 id: this.props.user.id + '-' + this.state.announcement.id,
                                 senderId: this.props.user.id,
                                 recipientId: this.state.user.id,
-                                senderName: this.props.user.displayName?  this.props.user.displayName : this.props.user.email,
+                                senderName: this.props.user.displayName ? this.props.user.displayName : this.props.user.email,
                                 recipientName: this.state.user.displayName,
                                 senderAvatar: this.props.user.photoURL,
                                 recipientAvatar: this.state.user.photoURL,
@@ -94,7 +100,36 @@ class DetailsPage extends Component {
     }
 
     onSendingEmailm = () => {
+        const id = Date.now();
+        let notif = {
+            id: id,
+            subject: this.state.formValues.subject,
+            email: this.state.formValues.email,
+            author: this.state.formValues.name,
+            avatar: this.props.user && this.props.user.photoURL ? this.props.user.photoURL : 'http://placehold.it/50x50',
+            createAt: DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT),
+            message: this.state.formValues.message,
+            seen: false,
+            toEmail: this.state.announcement.owner.email,
+            toId: this.state.announcement.ownerId,
+            type: "email",
+            announcementId: this.state.announcement.id,
+            announcementTitle: this.state.announcement.title
+        }
+        base.post(`/notifications/${id}`, {
+            data: notif,
+        });
 
+        let formValues = this.state.formValues;
+        formValues.message = ''
+        this.setState(formValues)
+    }
+
+    handleInputChange = (event) => {
+        const field = event.target.name;
+        let formValues = this.state.formValues;
+        formValues[field] = event.target.value;
+        this.setState({ formValues: Object.assign({}, formValues) });
     }
 
     componentDidUpdate() {
@@ -116,12 +151,24 @@ class DetailsPage extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        if (this.props.user && this.props.user.id) {
+            let formValues = this.state.formValues;
+            formValues.name = this.props.user.displayName;
+            formValues.email = this.props.user.email;
+            formValues.subject = "I am very interested in your ad";
+
+        }
+    }
+
     render() {
         return (
             <Fragment>
                 {this.state.announcement && this.state.announcement.id &&
                     <DetailsDesktop
                         onSendingEmailm={this.onSendingEmailm}
+                        handleInputChange={this.handleInputChange}
+                        formValues={this.state.formValues}
                         announcement={this.state.announcement}
                         user={this.state.user}
                         relateds={this.state.relateds}

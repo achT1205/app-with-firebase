@@ -1,40 +1,66 @@
 import React, { Component } from "react";
 import {
-  MDBCard,
-  MDBCardBody,
   MDBListGroup,
 } from "mdbreact";
 
+import base from '../base'
+import withAuthentication from '../hoc/withAuthentication'
+import NotifCard from './NotifCard'
+
 class Notifications extends Component {
+
+  state = {
+    notifications: [],
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.user && this.props.user.id) {
+      base.listenTo('notifications', {
+        context: this,
+        asArray: true,
+        queries: {
+          orderByChild: 'toId',
+          equalTo: this.props.user.id
+        },
+        then(notifications) {
+          this.fetchNotifications(notifications);
+        }
+      })
+    }
+  }
+
+  fetchNotifications(notifications) {
+    if (notifications && notifications.length > 0) {
+      let notifs = [];
+      notifications.forEach((c) => {
+        if (c.seen === false) {
+          c.active = true;
+        } else {
+          c.active = false;
+        }
+        notifs.push(c);
+      })
+      this.setState({ notifications: notifs });
+    }
+  }
+
   render() {
     return (
       <MDBListGroup className="list-unstyled pl-3 pr-3">
-        <NotifCard />
-        <NotifCard />
-        <NotifCard />
-        <NotifCard />
+        {
+          this.state.notifications.map((notification) => (
+            <NotifCard
+              key={notification.id}
+              notification={notification}
+            />
+          ))
+        }
       </MDBListGroup>
     );
   }
 }
 
-const NotifCard = () => (
-  <li className="chat-message d-flex justify-content-between mt-4">
-    <MDBCard>
-      <MDBCardBody>
-        <div>
-          <strong className="primary-font">{"Achille TUGLO"}</strong>
-          <small className="pull-right text-muted">
-            <i className="fa fa-clock-o" /> {"5 min ago"}
-          </small>
-        </div>
-        <hr />
-        <p className="mb-0">
-          Lorem ipsum dolor sit amet, gggggggggggggggggg ttttttttttt consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      </MDBCardBody>
-    </MDBCard>
-  </li>
-);
 
-export default Notifications;
+
+const WrappedNotifications = withAuthentication(Notifications)
+export default WrappedNotifications;

@@ -6,7 +6,7 @@ import DetailsAccordion from './DetailsAccordion';
 import DetailsContact from './DetailsContact';
 import RelatedAnnouncements from './RelatedAnnouncements';
 const DetailsDesktop = props => {
-    const { announcement, onSendingEmailm, user, redirectToProfile, redirectToChat, relateds, currentUser } = props;
+    const { announcement, onSendingEmailm,handleInputChange,formValues, user, redirectToProfile, redirectToChat, relateds, currentUser } = props;
     return (
         <section className="my-5">
             <MDBContainer>
@@ -47,6 +47,8 @@ const DetailsDesktop = props => {
                                     location={announcement.location}
                                     onSendingEmailm={onSendingEmailm}
                                     to={announcement.owner.name}
+                                    handleInputChange={handleInputChange}
+                                    formValues={formValues}
                                 />
                             </MDBCardBody>
                         </MDBCard>

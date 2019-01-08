@@ -10,7 +10,9 @@ class NotificationPage extends Component {
   render() {
     return (
       <Container>
-        <Notifications />
+        {this.props.user && this.props.user.id &&
+          <Notifications user={this.props.user} />
+        }
       </Container>
     )
   }

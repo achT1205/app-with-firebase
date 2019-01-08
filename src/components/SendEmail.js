@@ -1,7 +1,8 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
+import withAuthentication from '../hoc/withAuthentication';
 
-const SendEmail = () => {
+const SendEmail = ({handleInputChange, formValues, handleSubmit}) => {
   return (
     <MDBContainer>
       <MDBRow>
@@ -11,11 +12,14 @@ const SendEmail = () => {
               <MDBInput
                 label="Your name"
                 icon="user"
+                name="name"
                 group
                 type="text"
                 validate
                 error="wrong"
                 success="right"
+                value={formValues.name}
+                onChange={handleInputChange}
               />
               <MDBInput
                 label="Your email"
@@ -25,6 +29,9 @@ const SendEmail = () => {
                 validate
                 error="wrong"
                 success="right"
+                name="email"
+                value={formValues.email}
+                onChange={handleInputChange}
               />
               <MDBInput
                 label="Subject"
@@ -34,16 +41,22 @@ const SendEmail = () => {
                 validate
                 error="wrong"
                 success="right"
+                name="subject"
+                value={formValues.subject}
+                onChange={handleInputChange}
               />
               <MDBInput
                 type="textarea"
                 rows="2"
                 label="Your message"
                 icon="pencil"
+                name="message"
+                value={formValues.message}
+                onChange={handleInputChange}
               />
             </div>
             <div className="text-center">
-              <MDBBtn outline color="secondary">
+              <MDBBtn outline color="secondary" onClick={handleSubmit}>
                 Send <MDBIcon icon="paper-plane-o" className="ml-1" />
               </MDBBtn>
             </div>
@@ -53,5 +66,4 @@ const SendEmail = () => {
     </MDBContainer>
   );
 };
-
 export default SendEmail;

@@ -26,7 +26,8 @@ class Routes extends React.Component {
         <Route path="/profile/:id" component={AccountPage} />
         <Route path="/chat" component={ChatPage} />
         <Route path="/chats/:id" component={ChatPage} />
-        <Route path="/notifications" component={NotificationPage} />
+        <Route path="/notification" component={NotificationPage} />
+        <Route path="/notifications/:id" component={NotificationPage} />
         <Route
           render={function () {
             return <h1>Not Found</h1>;

@@ -18,6 +18,7 @@ import logo from "../../../flags/blank.gif";
 import "../../../flags/flags.min.css";
 import weDealLogo from '../../../logo.png'
 import ChatNotification from './ChatNotification'
+import Notification from './Notification'
 import { withNamespaces } from 'react-i18next';
 import './index.css'
 
@@ -102,20 +103,10 @@ class Header extends Component {
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <ChatNotification currentUser={currentUser}/>
+                                <ChatNotification currentUser={currentUser} />
                             </NavItem>
                             <NavItem>
-                                <Dropdown>
-                                    <DropdownToggle className="dopdown-toggle" nav>
-                                        <span className="waves-effect waves-light d-flex align-items-center">
-                                            <Fa icon="bell" className="ml-1 mt-2" />
-                                            <span className="notif-label" color="danger" > 1290 </span>
-                                        </span>
-                                    </DropdownToggle>
-                                    <DropdownMenu className="dropdown-default">
-                                        <DropdownItem href="/notifications">Notif #1</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
+                                <Notification currentUser={currentUser} />
                             </NavItem>
                             <NavItem>
                                 <div className="flags">

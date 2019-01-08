@@ -19,7 +19,7 @@ class DetailsAccordion extends Component {
 
   render() {
     const { collapseID } = this.state;
-    const { description, location, onSendingEmailm, to } = this.props;
+    const { description, location, onSendingEmailm, to, handleInputChange, formValues } = this.props;
     return (
       <Container>
         <Container className="md-accordion mt-5">
@@ -93,7 +93,11 @@ class DetailsAccordion extends Component {
             </CollapseHeader>
             <Collapse id="collapse3" isOpen={collapseID}>
               <CardBody>
-                <SendEmail onSendingEmailm={onSendingEmailm} />
+                <SendEmail 
+                handleSubmit={onSendingEmailm} 
+                handleInputChange={handleInputChange} 
+                formValues={formValues} 
+                />
               </CardBody>
             </Collapse>
           </Card>

@@ -64,7 +64,7 @@ class ChatNotification extends Component {
                     <DropdownMenu className="dropdown-default">
                         {this.state.conversations && this.state.conversations.length > 0 &&
                             this.state.conversations.map((conversation) => (
-                                <DropdownItem href={`chats/${conversation.id}`} key={conversation.id} >
+                                <DropdownItem href={`/chats/${conversation.id}`} key={conversation.id} >
                                     <NotificationItem
                                         conversation={conversation}
                                         selectConversation={this.selectConversation}
