@@ -19,7 +19,14 @@ class DetailsAccordion extends Component {
 
   render() {
     const { collapseID } = this.state;
-    const { description, location, onSendingEmailm, to, handleInputChange, formValues } = this.props;
+    const { description,
+      location,
+      onSendingEmailm,
+      to,
+      handleInputChange,
+      formValues,
+      owner,
+      currentUser } = this.props;
     return (
       <Container>
         <Container className="md-accordion mt-5">
@@ -87,20 +94,23 @@ class DetailsAccordion extends Component {
             </Collapse>
           </Card>
 
-          <Card>
-            <CollapseHeader onClick={this.toggleCollapse('collapse3')}>Write to {to}
-              <i className={collapseID === 'collapse3' ? 'fa fa-angle-down rotate-icon' : 'fa fa-angle-down'}></i>
-            </CollapseHeader>
-            <Collapse id="collapse3" isOpen={collapseID}>
-              <CardBody>
-                <SendEmail 
-                handleSubmit={onSendingEmailm} 
-                handleInputChange={handleInputChange} 
-                formValues={formValues} 
-                />
-              </CardBody>
-            </Collapse>
-          </Card>
+          {
+            owner && currentUser && owner.id !== currentUser.id &&
+            <Card>
+              <CollapseHeader onClick={this.toggleCollapse('collapse3')}>Send an e-mail to {to}
+                <i className={collapseID === 'collapse3' ? 'fa fa-angle-down rotate-icon' : 'fa fa-angle-down'}></i>
+              </CollapseHeader>
+              <Collapse id="collapse3" isOpen={collapseID}>
+                <CardBody>
+                  <SendEmail
+                    handleSubmit={onSendingEmailm}
+                    handleInputChange={handleInputChange}
+                    formValues={formValues}
+                  />
+                </CardBody>
+              </Collapse>
+            </Card>
+          }
         </Container>
       </Container>
     );

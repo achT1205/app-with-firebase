@@ -43,22 +43,28 @@ class Chat extends Component {
   }
 
   selectConversation = (id) => {
-    this.state.conversations.forEach((c) => {
+    let conversations = this.state.conversations;
+    conversations.forEach((c) => {
       if (c.id === id) {
         c.active = true;
-        /*
         if (c.toRespond > 0) {
-        c.toRespond = 0;
-          base.update(`/conversations/${id}`, {
+          c.seen = true;
+          c.toRespond = 0;
+          base.update(`conversations/${id}`, {
             data: c
-          })
-        };*/
-        this.setState({ selectedConversation: c });
-      }
-      else {
+          });
+          this.setState({ selectedConversation: c })
+        }
+      } else {
         c.active = false;
       }
-    })
+    });
+
+    this.setState({ conversations })
+  }
+
+  setSelectedConversation = (c) => {
+    this.setState({ selectedConversation: c });
   }
 
   fetchConversations = (conversations) => {
@@ -119,8 +125,9 @@ class Chat extends Component {
   }
 
   hasMessage = (conversation) => {
-    if (conversation.messages.length === 1 && conversation.recipientId === this.props.user.id)
+    if (conversation.recipientId === this.props.user.id && conversation.messages.length === 1) {
       return false;
+    }
     return true;
   }
 

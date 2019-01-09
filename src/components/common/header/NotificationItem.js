@@ -6,14 +6,17 @@ import {
 import './index.css'
 
 const NotificationItem = ({
-  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, user
+  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, user, selectConversation
 }) => (
     <div
       className="d-flex justify-content-between p-2 border-light"
       style={{ backgroundColor: active ? "#eeeeee" : "" }}
+      onClick={() => selectConversation(id)}
     >
       <img src={user.id === recipientId ? senderAvatar : recipientAvatar} className="rounded-circle z-depth-0" style={{ height: "50px", padding: 0 }} alt="" />
-      <div style={{ fontSize: "0.75rem",  marginTop: 15 , marginLeft :15 }}>
+      <div style={{ fontSize: "0.75rem",  marginTop: 15 , marginLeft :15 }}
+      
+      >
         <strong>{user.id === recipientId ? senderName : recipientName}</strong>
         {messages.length > 1 &&
           <p className="text-muted">{messages[messages.length - 1].message.substring(0, 10) + "..."}</p>

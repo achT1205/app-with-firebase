@@ -203,7 +203,7 @@ class EditPage extends React.Component {
     const images = this.state.images;
     for (let i = 0; i < images.length; i++) {
       if (images[i].id === id) {
-        images.slice(i, 1);
+        images.splice(i, 1);
       }
     }
     this.setState({ images: images })

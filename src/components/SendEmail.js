@@ -1,6 +1,5 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
-import withAuthentication from '../hoc/withAuthentication';
 
 const SendEmail = ({handleInputChange, formValues, handleSubmit}) => {
   return (

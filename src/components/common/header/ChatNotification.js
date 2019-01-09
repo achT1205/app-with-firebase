@@ -4,15 +4,20 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    Fa
+    Fa,
+    MDBBadge
 } from "mdbreact";
 import withAuthentication from '../../../hoc/withAuthentication'
 import NotificationItem from './NotificationItem'
 import base from '../../../base'
+import createHistory from 'history/createBrowserHistory';
+const history = createHistory({ forceRefresh: true })
+
 
 class ChatNotification extends Component {
     state = {
         conversations: [],
+        count: 0
     }
 
     componentWillReceiveProps() {
@@ -33,20 +38,25 @@ class ChatNotification extends Component {
     fetchConversations(conversations) {
         if (conversations && conversations.length > 0) {
             let cvs = [];
+            let count = 0;
             conversations.forEach((c) => {
                 if (c.messages && c.messages.length > 1) {
                     if (c.toRespond > 0 && c.seen === false) {
+                        count++;
                         c.active = true;
                     } else {
                         c.active = false;
                     }
                     cvs.push(c);
                 }
-            })
-            this.setState({ conversations: cvs });
+            });
+            this.setState({ conversations: cvs, count: count });
         }
     }
+
+
     selectConversation = (id) => {
+        history.push(`/chats/${id}`);
     }
 
     render() {
@@ -56,23 +66,27 @@ class ChatNotification extends Component {
                     <DropdownToggle className="dopdown-toggle" nav>
                         <span className="waves-effect waves-light d-flex align-items-center">
                             <Fa icon="envelope" className="ml-1 mt-2" />
-                            {this.state.conversations.length > 0 &&
-                                <span className="notif-label" color="danger" > {this.state.conversations.length} </span>
+                            {this.state.count > 0 &&
+                                <MDBBadge color="danger" className="notif-label">
+                                    {this.state.count}
+                                </MDBBadge>
                             }
                         </span>
                     </DropdownToggle>
-                    <DropdownMenu className="dropdown-default">
-                        {this.state.conversations && this.state.conversations.length > 0 &&
-                            this.state.conversations.map((conversation) => (
-                                <DropdownItem href={`/chats/${conversation.id}`} key={conversation.id} >
-                                    <NotificationItem
-                                        conversation={conversation}
-                                        selectConversation={this.selectConversation}
-                                        user={this.props.user} />
-                                </DropdownItem>
-                            ))
-                        }
-                    </DropdownMenu>
+                    {this.state.conversations && this.state.conversations.length > 0 &&
+                        <DropdownMenu className="dropdown-default">
+                            {
+                                this.state.conversations.map((conversation) => (
+                                    <DropdownItem key={conversation.id} >
+                                        <NotificationItem
+                                            conversation={conversation}
+                                            selectConversation={this.selectConversation}
+                                            user={this.props.user} />
+                                    </DropdownItem>
+                                ))
+                            }
+                        </DropdownMenu>
+                    }
                 </Dropdown>
             </Fragment>
         )

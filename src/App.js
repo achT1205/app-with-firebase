@@ -173,6 +173,7 @@ class App extends Component {
       signInMode: 1,
       currentUser: user
     })
+    window.location.reload();
   }
 
   handleCredentialChange = (event) => {

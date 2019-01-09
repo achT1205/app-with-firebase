@@ -4,7 +4,8 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    Fa
+    Fa,
+    MDBBadge
 } from "mdbreact";
 import withAuthentication from '../../../hoc/withAuthentication'
 import NotifItem from './NotifItem'
@@ -14,6 +15,7 @@ import './index.css'
 class Notification extends Component {
     state = {
         notifications: [],
+        count: 0
     }
 
     componentWillReceiveProps() {
@@ -34,15 +36,17 @@ class Notification extends Component {
     fetchNotifications(notifications) {
         if (notifications && notifications.length > 0) {
             let notifs = [];
+            let count = 0;
             notifications.forEach((c) => {
                 if (c.seen === false) {
                     c.active = true;
+                    count++;
                 } else {
                     c.active = false;
                 }
                 notifs.push(c);
             })
-            this.setState({ notifications: notifs });
+            this.setState({ notifications: notifs, count: count });
         }
     }
 
@@ -53,22 +57,26 @@ class Notification extends Component {
                     <DropdownToggle className="dopdown-toggle" nav>
                         <span className="waves-effect waves-light d-flex align-items-center">
                             <Fa icon="bell" className="ml-1 mt-2" />
-                            {this.state.notifications.length > 0 &&
-                                <span className="notif-label" color="danger" > {this.state.notifications.length} </span>
+                            {this.state.count > 0 &&
+                                <MDBBadge color="danger" className=" notif-label">
+                                    {this.state.count}
+                                </MDBBadge>
                             }
                         </span>
                     </DropdownToggle>
-                    <DropdownMenu className="dropdown-default">
-                        {this.state.notifications && this.state.notifications.length > 0 &&
-                            this.state.notifications.map((notification) => (
-                                <DropdownItem href={`/notifications/${notification.id}`} key={notification.id} >
-                                    <NotifItem
-                                        notification={notification}
-                                    />
-                                </DropdownItem>
-                            ))
-                        }
-                    </DropdownMenu>
+                    {this.state.notifications && this.state.notifications.length > 0 &&
+                        <DropdownMenu className="dropdown-default">
+                            {
+                                this.state.notifications.map((notification) => (
+                                    <DropdownItem href={`/notifications/${notification.id}`} key={notification.id} >
+                                        <NotifItem
+                                            notification={notification}
+                                        />
+                                    </DropdownItem>
+                                ))
+                            }
+                        </DropdownMenu>
+                    }
                 </Dropdown>
             </Fragment>
         )

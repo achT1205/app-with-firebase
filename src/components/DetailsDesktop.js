@@ -49,6 +49,8 @@ const DetailsDesktop = props => {
                                     to={announcement.owner.name}
                                     handleInputChange={handleInputChange}
                                     formValues={formValues}
+                                    owner={announcement.owner}
+                                    currentUser ={currentUser}
                                 />
                             </MDBCardBody>
                         </MDBCard>

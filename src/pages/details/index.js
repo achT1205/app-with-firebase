@@ -54,7 +54,6 @@ class DetailsPage extends Component {
                         if (conversation && conversation.id) {
                             history.push(`/chats/${this.props.user.id + '-' + this.state.announcement.id}`);
                         } else {
-                            debugger
                             let newConversation = {
                                 id: this.props.user.id + '-' + this.state.announcement.id,
                                 senderId: this.props.user.id,
@@ -100,6 +99,14 @@ class DetailsPage extends Component {
     }
 
     onSendingEmailm = () => {
+        if (!this.state.formValues.message) {
+            toast.error("You must write a message to continue :(", {
+                position: "top-right",
+                autoClose: 5000,
+                closeButton: true,
+            });
+            return
+        }
         const id = Date.now();
         let notif = {
             id: id,
@@ -123,6 +130,12 @@ class DetailsPage extends Component {
         let formValues = this.state.formValues;
         formValues.message = ''
         this.setState(formValues)
+
+        toast.success("Your email has been sent succefuly !", {
+            position: "top-right",
+            autoClose: 5000,
+            closeButton: true,
+        });
     }
 
     handleInputChange = (event) => {
@@ -141,10 +154,12 @@ class DetailsPage extends Component {
                     queries: {
                         orderByChild: 'ownerId',
                         equalTo: this.state.announcement.ownerId,
-                        limitToLast: 6
+                        limitToLast: 7
                     },
                     then(data) {
-                        this.setState({ relateds: data })
+                        let index = data.findIndex(c => c.id === parseInt(this.props.match.params.id))
+                        let announcements = data.splice(index,1);
+                        this.setState({ relateds: announcements })
                     }
                 });
             }

@@ -71,7 +71,7 @@ const DetailsContact = (props) => {
                 </a>
               </li>
               {
-                currentUser && user.isConnected && user.id !== currentUser.id &&
+                currentUser && user.id !== currentUser.id &&
                 <li className="list-inline-item" onClick={redirectToChat}>
                   <a href="#!" className="p-2 fa-lg w-ic">
                     <MDBIcon icon="comments-o" />

@@ -7,7 +7,7 @@ import {
 } from "mdbreact";
 
 const Conversation = ({
-  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, selectConversation, user
+  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, toRespond, seen, active }, selectConversation, user
 }) => (
     <Fragment>
       {(user.id === recipientId && messages.length > 1 || user.id !== recipientId) &&
