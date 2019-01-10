@@ -53,8 +53,8 @@ class Chat extends Component {
           base.update(`conversations/${id}`, {
             data: c
           });
-          this.setState({ selectedConversation: c })
         }
+        this.setState({ selectedConversation: c })
       } else {
         c.active = false;
       }
@@ -125,7 +125,8 @@ class Chat extends Component {
   }
 
   hasMessage = (conversation) => {
-    if (conversation.recipientId === this.props.user.id && conversation.messages.length === 1) {
+    const userId = this.props.user.id;
+    if (conversation.recipientId === userId && conversation.messages.length === 1) {
       return false;
     }
     return true;
@@ -141,7 +142,7 @@ class Chat extends Component {
               <MDBRow className="px-lg-2 px-2">
                 <MDBCol md="6" xl="4" className="px-0 mb-4 mb-md-0 scrollable-friends-list">
                   <h6 className="font-weight-bold mb-3 text-lg-left">Chat</h6>
-                  {(this.state.conversations.every(this.hasMessage)) &&
+                  {(this.state.conversations.some(this.hasMessage)) &&
                     <MDBScrollbar>
                       <div className="white z-depth-1 p-3">
                         <MDBListGroup className="friend-list">

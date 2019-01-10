@@ -15,7 +15,6 @@ class Notifications extends Component {
 
   componentWillReceiveProps() {
     if (this.props.user && this.props.user.id) {
-      debugger
       base.listenTo('notifications', {
         context: this,
         asArray: true,
@@ -34,17 +33,22 @@ class Notifications extends Component {
     if (notifications && notifications.length > 0) {
       let notifs = [];
       notifications.forEach((c) => {
-        if (c.seen === false) {
-          c.active = true;
-        } else {
-          c.active = false;
-        }
-        if (this.props.match && this.props.match.params.id && this.props.match.params.id === c.id) {
+        const id = c.id;
+        const currentId = parseInt(this.props.match.params.id);
+        debugger
+        if (currentId === id) {
           debugger
-          c.active = false;
-          base.update(`notifications/${c.id}`, {
+          c.active = true;
+          c.seen = true;
+          base.update(`notifications/${id}`, {
             data: c
           });
+        } else {
+          if (c.seen === false) {
+            c.active = true;
+          } else {
+            c.active = false;
+          }
         }
         notifs.push(c);
       })
