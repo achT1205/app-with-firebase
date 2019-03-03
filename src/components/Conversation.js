@@ -8,14 +8,17 @@ import {
 import Timestamp from 'react-timestamp'
 
 const Conversation = ({
-  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, toRespond, seen, active, title }, selectConversation, user
+  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, toRespond, seen, title },
+  selectConversation,
+  user,
+  selectedConversation
 }) => (
     <Fragment>
       {(user.id === recipientId && messages.length > 1 || user.id !== recipientId) &&
         <MDBListGroupItem
           href="#!"
           className="d-flex justify-content-between p-2 border-light"
-          style={{ backgroundColor: active ? "#eeeeee" : "" }}
+          style={{ backgroundColor: selectedConversation && selectedConversation.id === id ? "#eeeeee" : "" }}
           onClick={() => selectConversation(null, id)}
         >
           <MDBAvatar
@@ -26,8 +29,8 @@ const Conversation = ({
             className="mr-2 z-depth-1"
           />
           <div>
-            <span className="bq-title">{user.id === recipientId ? senderName : recipientName}</span>
-            <div><strong>{title} </strong></div>
+            <div><strong>{user.id === recipientId ? senderName : recipientName} </strong></div>
+            <span className="bq-title">{title}</span>
             {messages.length > 1 &&
               <p className="text-muted">{messages[messages.length - 1].message.substring(0, 10) + "..."}</p>
             }

@@ -79,7 +79,6 @@ class Chat extends Component {
                     updatedAt: Date.now() / 1000 | 0,
                     toRespond: 0,
                     seen: true,
-                    active: false,
                     messages: [
                       {
                         id: 0,
@@ -122,23 +121,20 @@ class Chat extends Component {
     else {
       conversations.forEach((c) => {
         if (c.id === id) {
-          c.active = true;
           if (c.messages &&
             c.messages.length > 0 &&
             c.messages[c.messages.length - 1].recipientId === this.props.user.id &&
             c.toRespond > 0) {
             c.seen = true;
             c.toRespond = 0;
+          }
+          if (id && c.id) {
             base.update(`conversations/${id}`, {
               data: c
             });
-          }
-          if (id && c.id) {
             this.setState({ selectedConversation: c })
           }
-        } else {
-          c.active = false;
-        }
+        } 
       });
       this.scrollToTop()
     }
@@ -231,6 +227,7 @@ class Chat extends Component {
                               key={conversation.id}
                               conversation={conversation}
                               selectConversation={this.selectConversation}
+                              selectedConversation={this.state.selectedConversation}
                               user={this.props.user} />
                           ))}
                         </MDBListGroup>
@@ -242,7 +239,7 @@ class Chat extends Component {
                   <div >
                     <Element name="test7" className="element" id="containerElement" style={{
                       position: 'relative',
-                      height: '300px',
+                      height: '388px',
                       marginBottom: '30px',
                       overflowY: 'scroll',
                     }}>

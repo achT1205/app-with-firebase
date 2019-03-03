@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter} from 'mdbreact';
+import { Button, Modal, ModalBody, ModalHeader, ModalFooter, NavLink } from 'mdbreact';
 import { withNamespaces } from 'react-i18next';
 
-const EndCreateUpdate = ({ toggle, modal, isUpdating , actions}) => {
+const EndCreateUpdate = ({ toggle, modal, isUpdating, actions }) => {
 
     const message = isUpdating ? "Your post has been updated succefuly :)"
         : "Your post has been create succefuly :)";
@@ -14,9 +14,15 @@ const EndCreateUpdate = ({ toggle, modal, isUpdating , actions}) => {
                 {message}
             </ModalBody>
             <ModalFooter>
-                <Button className="float-left" color="secondary" onClick={() =>actions(1)}>Create a new</Button>
-                <Button color="primary" onClick={() =>actions(2)}>Modify</Button>{' '}
-                <Button color="primary" onClick={() =>actions(3)}>Go to my list</Button>
+                <NavLink to={`/create`}>
+                    <Button color="primary">Create a new</Button>
+                </NavLink>
+                {' '}
+                <Button className="float-left" color="secondary" onClick={toggle}>Modify</Button>
+                {' '}
+                <NavLink to="/manage">
+                    <Button color="primary">Go to my list</Button>
+                </NavLink>
             </ModalFooter>
         </Modal>
     );

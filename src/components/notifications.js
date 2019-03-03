@@ -35,9 +35,7 @@ class Notifications extends Component {
       notifications.forEach((c) => {
         const id = c.id;
         const currentId = parseInt(this.props.match.params.id);
-        debugger
         if (currentId === id) {
-          debugger
           c.active = true;
           c.seen = true;
           base.update(`notifications/${id}`, {

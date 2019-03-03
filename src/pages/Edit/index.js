@@ -10,14 +10,6 @@ import base, { storage } from '../../base';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-
-import createHistory from 'history/createBrowserHistory';
-const history = createHistory({ forceRefresh: true })
-
-const handleRedirect = (path, id) => {
-  history.push(`/${path}/${id}`);
-}
-
 class EditPage extends React.Component {
   state = {
     modal: false,
@@ -99,6 +91,7 @@ class EditPage extends React.Component {
         });
       }
     });
+    this.setState({ toggle: false })
   }
 
   formateUser = async user => {
@@ -164,13 +157,13 @@ class EditPage extends React.Component {
 
   addAnnouncement = (user) => {
     let announcement = this.state.announcement;
-    let id = this.props.match.params.id ? this.props.match.params.id : Date.now()/1000|0;
+    let id = this.props.match.params.id ? this.props.match.params.id : Date.now() / 1000 | 0;
     announcement.id = id;
     announcement.ownerId = user.uid;
     if (this.props.match.params.id) {
-      announcement.lastModifDate = Date.now()/1000|0;
+      announcement.lastModifDate = Date.now() / 1000 | 0;
     } else {
-      announcement.createAt = Date.now()/1000|0;
+      announcement.createAt = Date.now() / 1000 | 0;
     }
     this.uploadImages(announcement);
   }
@@ -186,17 +179,18 @@ class EditPage extends React.Component {
   }
 
   fileInputHandler = (event) => {
-    if (event.target.files[0]) {
+    if (event.target.files && event.target.files.length > 0) {
       let { images } = this.state;
-      console.log(event.target.files[0]);
-      let image = {
-        id: Date.now()/1000|0,
-        file: event.target.files[0]
-      };
-      images.push(image);
+      for (let i = 0; i < event.target.files.length; i++) {
+        let file = event.target.files[i];
+        let image = {
+          id: Date.now() / 1000 | 0,
+          file: file
+        };
+        images.push(image);
+      }
       this.setState({ images });
     }
-
   }
 
   handleRemove = (id) => {
@@ -223,24 +217,40 @@ class EditPage extends React.Component {
     }
   }
 
-  uploadImageAsPromise = (image, announcement) => {
-    let fullName = image.id + image.file.name;
-    let task = storage.ref(`images/${fullName}`).put(image.file);
-    return task.then(() => {
-      task.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        let picture = {
-          id: image.id,
-          name: image.file.name,
-          url: downloadURL,
-          thumb: downloadURL.replace(fullName, "thumb_" + fullName)
+  uploadImageAsPromise(image, announcement, lastId) {
+    let that = this;
+    return new Promise(function (resolve, reject) {
+      let fullName = image.id + image.file.name;
+      let task = storage.ref(`images/${fullName}`).put(image.file);
+      //Update progress bar
+      task.on('state_changed',
+        function progress(snapshot) {
+          var percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+          //uploader.value = percentage;
+        },
+        (err) => {
+          console.error(err);
+        },
+        () => {
+          let encoded = encodeURI(fullName);
+          task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            let picture = {
+              id: image.id,
+              name: image.file.name,
+              url: downloadURL,
+              thumb: downloadURL.replace(encoded, "thumb_" + encoded)
+            }
+            announcement.images.push(picture);
+            base.update(`/announcements/${announcement.id}`, {
+              data: announcement
+            })
+          });
+          if (image.id === lastId)
+          that.setState({ saving: false, modal: true })
         }
-        announcement.images.push(picture);
-        base.update(`/announcements/${announcement.id}`, {
-          data: announcement
-        })
-      })
+      );
     })
-  }
+  };
 
   uploadImages = (announcement) => {
     base.post(`/announcements/${announcement.id}`, {
@@ -248,7 +258,7 @@ class EditPage extends React.Component {
     })
     const { images } = this.state;
     if (images && images.length > 0) {
-      Promise.all(images.map(image => this.uploadImageAsPromise(image, announcement)))
+      Promise.all(images.map(image => this.uploadImageAsPromise(image, announcement, images[images.length - 1].id)))
         .then(() => {
           this.setState({ saving: false, modal: true })
         })
@@ -424,21 +434,6 @@ class EditPage extends React.Component {
     });
   }
 
-  EndCreateUpdateActions = (action) => {
-    switch (action) {
-      case 1:
-        handleRedirect("create", '')
-        break;
-      case 2:
-        if (this.state.announcement.id) { this.toggle() }
-        else { handleRedirect("edit", this.state.announcement.id) }
-        break;
-      case 3:
-        handleRedirect("manage", '')
-    }
-  }
-
-
   swimingPoolOptionId(label) {
     if (label === "Yes" || label === "Oui") {
       return true;
@@ -546,12 +541,13 @@ class EditPage extends React.Component {
             handleRemovePicture={this.handleRemovePicture}
             images={this.state.images}
           />
-          <EndCreateUpdate
-            modal={this.state.modal}
-            toggle={this.toggle}
-            isUpdating={this.props.match.params.id ? true : false}
-            actions={this.EndCreateUpdateActions}
-          />
+          {this.state.announcement && this.state.announcement.id &&
+            <EndCreateUpdate
+              modal={this.state.modal}
+              toggle={this.toggle}
+              isUpdating={this.props.match.params.id ? true : false}
+            />
+          }
           <ToastContainer
             position="top-right"
             autoClose={5000}

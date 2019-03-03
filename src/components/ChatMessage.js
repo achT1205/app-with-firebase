@@ -10,7 +10,7 @@ import Timestamp from 'react-timestamp'
 const ChatMessage = ({ message: { id, author, avatar, createAt, message, senderId }, isLast, user }) => (
   <Fragment>
     {id !== 0 && senderId === user.id &&
-      <li className="chat-message d-flex justify-content-between mb-4">
+      <li className="chat-message d-flex justify-content-between mb-4 p-5">
         <MDBCard>
           <MDBCardBody>
             <div id={id}>
@@ -18,9 +18,9 @@ const ChatMessage = ({ message: { id, author, avatar, createAt, message, senderI
             </div>
             <hr />
             <p className="mb-3">{message}</p>
-            <small className="pull-right text-muted">
-              <i className="fa fa-clock-o" /> <Timestamp time={createAt} autoUpdate  />
-            </small>
+            <p className="pull-right text-muted" style={{ fontSize: "0.55rem" }}>
+              <i className="fa fa-clock-o" /> <Timestamp time={createAt} autoUpdate />
+            </p>
           </MDBCardBody>
         </MDBCard>
         <MDBAvatar
@@ -33,7 +33,7 @@ const ChatMessage = ({ message: { id, author, avatar, createAt, message, senderI
       </li>
     }
     {id !== 0 && senderId !== user.id &&
-      <li className="chat-message d-flex justify-content-between mb-4">
+      <li className="chat-message d-flex justify-content-between mb-4 p-5">
         <MDBAvatar
           tag="img"
           src={avatar}
@@ -48,9 +48,9 @@ const ChatMessage = ({ message: { id, author, avatar, createAt, message, senderI
             </div>
             <hr />
             <p className="mb-3">{message}</p>
-            <small className="pull-right text-muted">
-                <i className="fa fa-clock-o" /> <Timestamp time={createAt} autoUpdate  />
-              </small>
+            <p className="pull-right text-muted" style={{ fontSize: "0.55rem" }}>
+              <i className="fa fa-clock-o" /> <Timestamp time={createAt} autoUpdate />
+            </p>
           </MDBCardBody>
         </MDBCard>
       </li>
