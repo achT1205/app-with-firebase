@@ -1,4 +1,5 @@
 import React from "react";
+import Timestamp from 'react-timestamp'
 const NotifItem = ({
   notification: { author, avatar, message, createAt, active }
 }) => (
@@ -13,7 +14,7 @@ const NotifItem = ({
       </div>
       <div>
         <p className="text-muted mb-0" style={{ fontSize: "0.50rem", marginLeft: 15 }}>
-          {createAt}
+        <Timestamp time={createAt} autoUpdate  />
         </p>
       </div>
     </div>

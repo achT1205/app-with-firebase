@@ -15,7 +15,9 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-i18next": "^8.4.0",
-    "react-scripts": "2.0.5"
+    "react-scripts": "2.0.5",
+    "react-scroll": "^1.7.11",
+    "react-timestamp": "^4.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

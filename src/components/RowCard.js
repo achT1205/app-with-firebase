@@ -1,13 +1,14 @@
 import React from "react";
 import { MDBCard, MDBCardImage, MDBCardBody,
-  MDBCardTitle,MDBCardText, MDBCardFooter,MDBTooltip
+  MDBCardTitle,MDBCardText, MDBCardFooter,MDBTooltip,NavLink
 } from "mdbreact";
 import { withNamespaces } from 'react-i18next';
 
 const RowCard = ( props) => {
-  const {announcement , t, handleClick } = props;
+  const {announcement , t } = props;
   return (
-    <MDBCard narrow ecommerce className="mb-2 mt-5" onClick={() => handleClick(announcement)} >
+    <NavLink to={`/details/${announcement.id}?ownerId=${announcement.ownerId}`}>
+    <MDBCard narrow ecommerce className="mb-2 mt-5" >
     <MDBCardImage
       cascade
       top
@@ -15,12 +16,12 @@ const RowCard = ( props) => {
       alt={announcement.title}
     />
     <MDBCardBody cascade>
-      <a href="" className="text-muted">
+      <strong href="" className="text-muted">
         <h5>{t('common.categories.'+announcement.category.toString())}</h5>
-      </a>
+      </strong>
       <MDBCardTitle>
         <strong>
-          <a href="">{announcement.title}</a>
+          <h4 href="">{announcement.title}</h4>
         </strong>
       </MDBCardTitle>
       <MDBCardText>
@@ -31,14 +32,14 @@ const RowCard = ( props) => {
         <span className="float-right">
           <MDBTooltip
             placement="top"
-            tag="a"
+            tag="span"
             component="i"
             componentClass="fa fa-eye grey-text ml-3"
             tooltipContent="Quick look"
           />
           <MDBTooltip
             placement="top"
-            tag="a"
+            tag="span"
             component="i"
             componentClass="fa fa-heart grey-text ml-3"
             tooltipContent="Add to favoritlist"
@@ -47,6 +48,8 @@ const RowCard = ( props) => {
       </MDBCardFooter>
     </MDBCardBody>
   </MDBCard>
+    </NavLink>
+
   );
 }
 

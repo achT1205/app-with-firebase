@@ -10,8 +10,7 @@ import {
 import withAuthentication from '../../../hoc/withAuthentication'
 import NotificationItem from './NotificationItem'
 import base from '../../../base'
-import createHistory from 'history/createBrowserHistory';
-const history = createHistory({ forceRefresh: true })
+
 
 
 class ChatNotification extends Component {
@@ -21,27 +20,30 @@ class ChatNotification extends Component {
     }
 
     componentWillReceiveProps() {
-        if (this.props.user && this.props.user.id)
+        if (this.props.user && this.props.user.id) {
             base.listenTo('conversations', {
                 context: this,
                 asArray: true,
                 queries: {
-                    orderByChild: 'recipientId',
-                    equalTo: this.props.user.id
+                    orderByChild: `messages/?recipientId=${this.props.user.id}`,
                 },
                 then(conversations) {
                     this.fetchConversations(conversations);
                 }
             })
+        }
     }
+
+    
 
     fetchConversations(conversations) {
         if (conversations && conversations.length > 0) {
             let cvs = [];
             let count = 0;
             conversations.forEach((c) => {
-                if (c.messages && c.messages.length > 1) {
-                    if (c.toRespond > 0 && c.seen === false) {
+                if ((c.recipientId === this.props.user.id || c.senderId === this.props.user.id) && c.messages && c.messages.length > 1) {
+                    let lastMessage = c.messages[c.messages.length - 1];
+                    if (lastMessage.recipientId === this.props.user.id && c.toRespond > 0 && c.seen === false) {
                         count++;
                         c.active = true;
                     } else {
@@ -50,13 +52,8 @@ class ChatNotification extends Component {
                     cvs.push(c);
                 }
             });
-            this.setState({ conversations: cvs, count: count });
+            this.setState({ conversations: cvs.sort(c => c.updatedAt), count: count });
         }
-    }
-
-
-    selectConversation = (id) => {
-        history.push(`/chats/${id}`);
     }
 
     render() {
@@ -74,7 +71,7 @@ class ChatNotification extends Component {
                         </span>
                     </DropdownToggle>
                     {this.state.conversations && this.state.conversations.length > 0 &&
-                        <DropdownMenu className="dropdown-default">
+                        <DropdownMenu className="dropdown-default notif-container">
                             {
                                 this.state.conversations.map((conversation) => (
                                     <DropdownItem key={conversation.id} >

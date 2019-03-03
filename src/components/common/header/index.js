@@ -102,12 +102,16 @@ class Header extends Component {
                                     {t('header.nav.menus.shop')}
                                 </NavLink>
                             </NavItem>
-                            <NavItem>
-                                <ChatNotification currentUser={currentUser} />
-                            </NavItem>
-                            <NavItem>
-                                <Notification currentUser={currentUser} />
-                            </NavItem>
+                            {currentUser && currentUser.id &&
+                                <NavItem>
+                                    <ChatNotification user={currentUser} />
+                                </NavItem>
+                            }
+                            {currentUser && currentUser.id &&
+                                <NavItem>
+                                    <Notification user={currentUser} />
+                                </NavItem>
+                            }
                             <NavItem>
                                 <div className="flags">
                                     <img src={logo} onClick={() => handleChange("fr")} className="flag flag-fr" alt="French" />

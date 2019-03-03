@@ -1,17 +1,17 @@
 import React, { Fragment } from "react";
 import {
   MDBBadge,
-  MDBIcon
+  MDBIcon,
+  NavLink
 } from "mdbreact";
 import './index.css'
+import Timestamp from 'react-timestamp'
 
 const NotificationItem = ({
-  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, createAt, toRespond, seen, active }, user, selectConversation
+  conversation: { id, senderName, recipientId, senderAvatar, recipientName, recipientAvatar, messages, updatedAt, toRespond, seen, active }, user, selectConversation
 }) => (
-    <div
-      className="d-flex justify-content-between p-2 border-light"
-      style={{ backgroundColor: active ? "#eeeeee" : "" }}
-      onClick={() => selectConversation(id)}
+     <NavLink to={`/chats/${id}`}
+      className={active ? "d-flex notif-list actived-notif":"d-flex notif-list"}    
     >
       <img src={user.id === recipientId ? senderAvatar : recipientAvatar} className="rounded-circle z-depth-0" style={{ height: "50px", padding: 0 }} alt="" />
       <div style={{ fontSize: "0.75rem",  marginTop: 15 , marginLeft :15 }}
@@ -23,8 +23,8 @@ const NotificationItem = ({
         }
       </div>
       <div>
-        <p className="text-muted mb-2" style={{ fontSize: "0.50rem", marginLeft: 15 }}>
-          {createAt}
+        <p className="text-muted notif-muted mb-2" style={{ fontSize: "0.50rem", marginLeft: 15 }}>
+        <Timestamp time={updatedAt} autoUpdate  />
         </p>
         {messages.length > 1 &&
           <Fragment>
@@ -55,8 +55,7 @@ const NotificationItem = ({
           </Fragment>
         }
       </div>
-    </div>
-
+    </NavLink>
   );
 
 export default NotificationItem

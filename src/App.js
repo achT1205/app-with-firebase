@@ -11,7 +11,7 @@ import SignInModal from './components/modals/SignIn';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import base, { firebaseApp } from './base'
-import { DateTime } from "luxon";
+
 
 class App extends Component {
   constructor(props) {
@@ -69,7 +69,7 @@ class App extends Component {
                   phone: "",
                   displayName: "",
                   emailVerified: false,
-                  createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
+                  createAt: Date.now()/1000|0,
                   lastUpdate: "",
                   isConnected: true
                 }
@@ -95,7 +95,7 @@ class App extends Component {
       displayName: authData.user.displayName,
       emailVerified: authData.user.emailVerified,
       email: authData.user.email,
-      createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
+      createAt: Date.now()/1000|0,
       lastUpdate: "",
       isConnected: true
     };
@@ -137,7 +137,7 @@ class App extends Component {
                 phone: "",
                 displayName: "",
                 emailVerified: user.emailVerified,
-                createAt: DateTime.local().setLocale('en-gb').toLocaleString(),
+                createAt: Date.now()/1000|0,
                 lastUpdate: "",
                 isConnected: true
               }

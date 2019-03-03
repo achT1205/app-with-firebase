@@ -1,3 +1,24 @@
+.notif-container{
+  background-color:white;
+}
+
+.actived-notif{
+  background-color: lightgray;
+}
+
+.notif-list{
+  background-color: lightgray;
+  color: white
+}
+
+.notif-muted{ 
+  size: 0.7rem !important;
+}
+
+.dropdown .dropdown-menu.dropdown-default .dropdown-item:hover :hover{
+background-color: lightgray !important;
+}
+
 .notif-label{
     font-size: 10px;
     position: relative;

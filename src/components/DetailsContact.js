@@ -1,8 +1,8 @@
 import React from "react";
-import { MDBRow, MDBCard, MDBCardBody, MDBIcon, MDBCol, Badge } from "mdbreact";
+import { MDBRow, MDBCard, MDBCardBody, MDBIcon, MDBCol, Badge, NavLink } from "mdbreact";
 
 const DetailsContact = (props) => {
-  const { owner, user, redirectToProfile, redirectToChat, currentUser } = props;
+  const { announcement, user, currentUser } = props;
   return (
     <MDBRow>
       <MDBCol>
@@ -10,19 +10,20 @@ const DetailsContact = (props) => {
           <MDBCardBody>
             <div className="content">
               {
-                 currentUser && user.id !== currentUser.id &&
+                currentUser && user.id !== currentUser.id &&
                 <div className="right-side-meta">
                   {user.isConnected === true && <Badge color="green" pill>Online</Badge>}
                   {user.isConnected === false && <Badge color="pink" pill>Off</Badge>}
                 </div>
               }
-              <img
-                src={user.photoURL}
-                alt=""
-                className="rounded-circle avatar-img z-depth-1-half"
-                onClick={redirectToProfile}
-              />
-              <a onClick={redirectToProfile}>{owner.name}</a>
+              <NavLink to={`/users/${announcement.owner.id}`}>
+                <img
+                  src={user.photoURL}
+                  alt=""
+                  className="rounded-circle avatar-img z-depth-1-half"
+                />
+                <span>{announcement.owner.name}</span>
+              </NavLink>
             </div>
           </MDBCardBody>
 
@@ -31,25 +32,25 @@ const DetailsContact = (props) => {
               <li>
                 <p>
                   <MDBIcon icon="map-marker" className="pr-2" />
-                  {owner.address}
+                  {announcement.owner.address}
                 </p>
               </li>
               <li>
                 <p>
                   <MDBIcon icon="phone" className="pr-2" />
-                  {owner.phone}
+                  {announcement.owner.phone}
                 </p>
               </li>
               <li>
                 <p>
                   <MDBIcon icon="envelope" className="pr-2" />
-                  {owner.email}
+                  {announcement.owner.email}
                 </p>
               </li>
               <li>
                 <p>
                   <MDBIcon icon="heart-o" className="pr-2" />
-                  {owner.likeCount} likes
+                  {announcement.owner.likeCount} likes
                   </p>
               </li>
             </ul>
@@ -72,10 +73,13 @@ const DetailsContact = (props) => {
               </li>
               {
                 currentUser && user.id !== currentUser.id &&
-                <li className="list-inline-item" onClick={redirectToChat}>
-                  <a href="#!" className="p-2 fa-lg w-ic">
-                    <MDBIcon icon="comments-o" />
-                  </a>
+                <li className="list-inline-item">
+                  <NavLink to={`/chats/${currentUser.id + '-' + announcement.id}`}>
+                    <span href="#!" className="p-2 fa-lg w-ic">
+                      <MDBIcon icon="comments-o" />
+                    </span>
+                  </NavLink>
+
                 </li>
               }
 

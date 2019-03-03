@@ -3,10 +3,10 @@ import { MDBContainer, toast, ToastContainer } from "mdbreact";
 import Form from '../../components/Form';
 import EndCreateUpdate from '../../components/modals/EndCreateUpdate';
 import categoryArray from './categories';
-import { DateTime } from "luxon";
+
 
 // Firebase
-import base, { storage }  from '../../base';
+import base, { storage } from '../../base';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -164,13 +164,13 @@ class EditPage extends React.Component {
 
   addAnnouncement = (user) => {
     let announcement = this.state.announcement;
-    let id = this.props.match.params.id ? this.props.match.params.id : Date.now();
+    let id = this.props.match.params.id ? this.props.match.params.id : Date.now()/1000|0;
     announcement.id = id;
     announcement.ownerId = user.uid;
     if (this.props.match.params.id) {
-      announcement.lastModifDate = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
+      announcement.lastModifDate = Date.now()/1000|0;
     } else {
-      announcement.createAt = DateTime.local().setLocale('en-gb').toLocaleString(DateTime.DATETIME_SHORT);
+      announcement.createAt = Date.now()/1000|0;
     }
     this.uploadImages(announcement);
   }
@@ -190,7 +190,7 @@ class EditPage extends React.Component {
       let { images } = this.state;
       console.log(event.target.files[0]);
       let image = {
-        id: Date.now(),
+        id: Date.now()/1000|0,
         file: event.target.files[0]
       };
       images.push(image);
